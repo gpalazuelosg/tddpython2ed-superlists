@@ -152,6 +152,11 @@ $ exit
 #### Generar Markdown
 Para generar el markdown me apoye con [Dillinger.io].
 
+> También use:
+[pandao.github.io/editor.md](https://pandao.github.io/editor.md/examples/full.html)
+[stackedit.io](https://stackedit.io/app)
+
+
 ### To-Do:
   - Depurar lista de comandos.
   - Agrupar comandos detallando qué hace cada uno.
