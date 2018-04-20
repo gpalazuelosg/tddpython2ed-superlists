@@ -123,67 +123,109 @@ $ workon superlists
 ```
 
 
+### Instalar Visual Studio Code
+
 ```
 $ curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 $ sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 $ sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
 $ sudo apt-get update
 $ sudo apt-get install code
-$ exit
-$ dir
-$ mkdir sandbox
-$ workon superlists
-$ python --version
-$ deactivate
-$ ls
-$ cd Downloads/
-$ ls
-$ wget https://github.com/mozilla/geckodriver/releases/download/v0.18.0/geckodriver-v0.18.0-linux64.tar.gz
-$ tar -xvzf geckodriver-v0.18.0-linux64.tar.gz
-$ rm geckodriver-v0.18.0-linux64.tar.gz
-$ chmod +x geckodriver
-$ cp geckodriver /usr/local/bin/
-$ sudo cp geckodriver /usr/local/bin/
-$ exit
-$ workon superlists
-$ python functional_tests.py 
-$ deactivate
-$ exit
-$ geckodriver --version
-$ pwd
-$ ls
-$ cd sandbox/
-$ ls
-$ dir
-$ workon superlists
-$ pip3 install "django<1.12" "selenium<4"
-$ mkdir tddpython2ed && cd _
-$ mkdir tddpython2ed
-$ cd tddpython2ed/
-$ git
-$ sudo apt install git
+```
+
+### Crear llaves ssh
+
+```
 $ cd ~
-$ dir
-$ ls -la
 $ mkdir .ssh
 $ cd .ssh
 $ ssh-keygen -t rsa -b 4096
 $ sudo apt-get install xclip
 $ xclip -sel clip < ~/.ssh/id_rsa.pub
-$ cd ~/sandbox/tddpython2ed/
-$ ls
-$ clear
-$ git clone git@github.com:gpalazuelosg/tddpython2ed-superlists.git
-$ ls
-$ cd tddpython2ed-superlists/
-$ ls
-$ python manage.py runserver
-$ deactivate
-$ exit
+```
+
+#### Agregar llaves ssh a github o bitbucket
+
+Debemos agregar las llaves a github y bitbucket para manejar mayor seguridad. Evitar utilizar password.
+
+Como referencia, revisa la páginas de github:
+
+  - [Connecting to GitHub with SSH](https://help.github.com/articles/connecting-to-github-with-ssh/) 
+  - [Generating a new SSH key and adding it to the ssh-agent](https://help.github.com/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent/)
+  - [Adding a new SSH key to your GitHub account](https://help.github.com/articles/adding-a-new-ssh-key-to-your-github-account/)
+  - [Set up GitHub push with SSH keys](https://gist.github.com/gpalazuelosg/f2f1f2e2b526a4e288759aea4cd6f9ca)
+  - [How to generate ssh key for git]( https://www.w3docs.com/snippets/git/how-to-generate-ssh-key-for-git.html)
+  - [Push to github without password using ssh-key](https://stackoverflow.com/questions/14762034/push-to-github-without-password-using-ssh-key)
+
+
+### Instalar geckodriver
+Find the latest release for your OS:
+	https://github.com/mozilla/geckodriver/releases
+
+```
+$ cd ~/Downloads/
+$ wget https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz
+$ tar -xvzf geckodriver-v0.18.0-linux64.tar.gz
+$ rm geckodriver-v0.18.0-linux64.tar.gz
+$ chmod +x geckodriver
+$ cp geckodriver /usr/local/bin/
+$ sudo cp geckodriver /usr/local/bin/
+$ geckodriver --version
 ```
 
 
-#### Generar Markdown
+### Clonar repositorio git
+
+```
+$ cd ~/Projects/
+$ git clone git@github.com:gpalazuelosg/tddpython2ed-superlists.git
+$ cd tddpython2ed-superlists/
+```
+
+Nota: si por alguna razón, al descargar el repositorio, no usaste *git@github.com* pero en su lugar usaste *https://github.com*, tendrás que ajustar algo para poder hacer ```git push``` sin pedirte contraseñas.
+
+En particular revisa los cambios que se hacen a ```git remote``` en las ligas siguientes:
+
+  - [Set up GitHub push with SSH keys](https://gist.github.com/gpalazuelosg/f2f1f2e2b526a4e288759aea4cd6f9ca)
+  - [Push to github without password using ssh-key](https://stackoverflow.com/questions/14762034/push-to-github-without-password-using-ssh-key)
+
+Básicamente esto es lo que hice:
+```
+$ git remote -v
+origin	https://github.com/gpalazuelosg/tddpython2ed-superlists.git (fetch)
+origin	https://github.com/gpalazuelosg/tddpython2ed-superlists.git (push)
+$ git remote set-url origin git@github.com/gpalazuelosg/tddpython2ed-superlists.git
+$ git remote -v
+origin	git@github.com/gpalazuelosg/tddpython2ed-superlists.git (fetch)
+origin	git@github.com/gpalazuelosg/tddpython2ed-superlists.git (push)
+
+```
+
+
+## La prueba final
+
+Ahora, con el código actual del repositorio, probar que todo funcione (Python + VirtualEnv + Django + Geckodriver):
+
+```
+$ cd ~/Projects/
+$ git clone git@github.com:gpalazuelosg/tddpython2ed-superlists.git
+$ cd tddpython2ed-superlists/
+$ workon superlists
+$ pip3 install "django<1.12" "selenium<4"
+$ pip freeze > requirements.txt
+$ python functional_tests.py 
+$ deactivate
+```
+
+Ahora puedes hacer hacer cambios en el repositorio y publicarlos.
+
+
+> Dependiendo el código actual, debe mostrar que todas las pruebas fueron satisfactorias ó algún. En cualquier caso, estamos bien pues se logró reinstalar todas las librerías y se puede continuar con el libro.
+
+
+
+
+## Generar Markdown
 Para generar el markdown me apoye con [Dillinger.io].
 
 También use:
@@ -191,10 +233,8 @@ También use:
   - [stackedit.io](https://stackedit.io/app)
 
 
-### To-Do:
-  - Depurar lista de comandos.
+## To-Do:
   - Agrupar comandos detallando qué hace cada uno.
-  - Agregar el texto que incluye al ./bash_rc cuando se configura geckodriver
 
    [Python TDD Book]: <https://www.amazon.com/Test-Driven-Development-Python-Selenium-JavaScript/dp/1491958707/ref=sr_1_1/131-5649203-4499659?s=books&ie=UTF8&qid=1519889044&sr=1-1&refinements=p_27%3AHarry+Percival>
    [Dillinger.io]: <https://dillinger.io/>
