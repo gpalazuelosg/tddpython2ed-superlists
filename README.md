@@ -194,11 +194,11 @@ Básicamente esto es lo que hice:
 $ git remote -v
 origin	https://github.com/gpalazuelosg/tddpython2ed-superlists.git (fetch)
 origin	https://github.com/gpalazuelosg/tddpython2ed-superlists.git (push)
-$ git remote set-url origin git@github.com/gpalazuelosg/tddpython2ed-superlists.git
-$ git remote -v
-origin	git@github.com/gpalazuelosg/tddpython2ed-superlists.git (fetch)
-origin	git@github.com/gpalazuelosg/tddpython2ed-superlists.git (push)
+$ git remote set-url origin git@github.com:gpalazuelosg/tddpython2ed-superlists.git
 
+$ git remote -v
+origin	git@github.com:gpalazuelosg/tddpython2ed-superlists.git (fetch)
+origin	git@github.com:gpalazuelosg/tddpython2ed-superlists.git (push)
 ```
 
 
