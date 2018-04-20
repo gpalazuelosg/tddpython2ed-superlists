@@ -85,7 +85,7 @@ $ nano ~/.bash_history
 $ cp ~/.bash_history ~/Downloads/bashHistory.txt
 ```
 
-#### Instalar virtualenvwrapper
+### Instalar virtualenvwrapper
 
 Esta herramienta permite generar ambientes virtuales desde cualquier lugar, y siempre guardándolos en un solo lugar para fácil acceso. Es mejor a venv.
 
@@ -124,20 +124,6 @@ $ workon superlists
 
 
 ```
-
-$ ls
-$ cp ~/.bash_history ~/Downloads/bashHistory.txt
-$ cd Downloads/
-$ ls
-$ curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
-$ sudo apt install curl
-$ curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
-$ ls
-$ rm nodesource_setup.sh 
-$ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
-$ sudo apt-get install -y nodejs
-$ sudo apt-get install -y build-essential
-$ exit
 $ curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 $ sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
 $ sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list'
