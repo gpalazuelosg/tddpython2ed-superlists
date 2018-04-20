@@ -18,6 +18,9 @@ Scripts ejecutados en Ubuntu 16.04 primero para instalar los programas, librerí
 ### Instalar git
 ```
 $ sudo apt install git
+$ git config --global user.email "juan.escutia@gmail.com"
+$ git config --global user.name "Juan Escutia"
+$ git config --global push.default simple
 ```
 
 ### Instalar Node
