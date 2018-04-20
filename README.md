@@ -13,12 +13,50 @@ Scripts ejecutados en Ubuntu 16.04 primero para instalar los programas, librerí
 
 > Es ideal para iniciar en un nuevo Ubuntu, instalando Python 3.6, VSCode, NVM, Node, Geckodriver, Django y Selenium.
 
-### Instalación
+## Instalación
 
-```sh
-$ gedit
-$ sudo apt-get update && sudo apt-get upgrade -y
-$ sudo apt-get dist-upgrade
+### Instalar git
+```
+$ sudo apt install git
+```
+
+### Instalar Node
+
+Conozco dos formas de instalar node. 
+  - Usando NVM
+  - Usando apt-get
+
+Puedo usar cualquier opción. La de apt-get recibe actualizaciones. Con nvm otra yo controlo cuando instalar, cual versión. Dejo las dos formas como referencia.
+
+#### Instalar NodeJS 8.x usando apt-get
+```
+$ cd Downloads/
+$ sudo apt install curl
+$ curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
+$ rm nodesource_setup.sh 
+$ curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+$ sudo apt-get install -y build-essential
+```
+
+#### Instalar NodeJS 8.x usando nvm
+```
+$ sudo apt install curl
+$ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.9/install.sh | bash
+$ nvm --version
+exit       # close Terminal and open a new one
+$ nvm --version
+$ nvm ls-remote --lts
+$ nvm install --lts    # this install latest LTS Node version
+$ nvm list
+$ node --version
+$ npm --version
+$ nvm --version
+```
+
+### Instalar Python 3.6
+
+```
 $ sudo apt-get update && sudo apt-get upgrade -y
 $ exit
 $ sudo add-apt-repository ppa:jonathonf/python-3.6
@@ -27,56 +65,66 @@ $ sudo apt install python3.6
 $ python --version
 $ python3 --version
 $ python3.6 --version
+```
+
+Para installar pip, debes consultar los pasos en https://pip.pypa.io/en/stable/installing/
+
+```
+$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+$ python3.6 get-pip.py
 $ pip3 --version
-$ wget -O get-pip.py 'https://bootstrap.pypa.io/get-pip.py';
-$ python get-pip.py --disable-pip-version-check --no-cache-dir pip==9.0.1
-$  sudo python get-pip.py --disable-pip-version-check --no-cache-dir pip==9.0.1
-$ pip --version
-$ pip3 --version
-$ sudo python3 get-pip.py --disable-pip-version-check --no-cache-dir pip==9.0.1
-$ pip3 --version
-$ sudo python3.6 get-pip.py --disable-pip-version-check --no-cache-dir pip==9.0.1
-$ pip3 --version
-$ exit
-$ ls
-$ cd Downloads/
-$ ls
+
 $ sudo apt-get install build-essential libssl-dev libffi-dev python-dev
 $ sudo apt-get install build-essential libssl-dev libffi-dev python3-dev
 $ sudo apt-get install build-essential libssl-dev libffi-dev python3.6-dev
-$ which pip3
-$ pip3 --version
+```
+
+Para revisar la historia de comandos hasta ahora:
+```
 $ nano ~/.bash_history
-$ exit
-$ nano ~/.bash_history
-$ exit
-$ which pip3
-$ which pip
-$ sudo pip3 install virtualenvwrapper
+$ cp ~/.bash_history ~/Downloads/bashHistory.txt
+```
+
+#### Instalar virtualenvwrapper
+
+Esta herramienta permite generar ambientes virtuales desde cualquier lugar, y siempre guardándolos en un solo lugar para fácil acceso. Es mejor a venv.
+
+```
 $ sudo apt-get update && sudo apt-get upgrade
-$ pip3 --version
 $ sudo pip3 install virtualenvwrapper
 $ mkdir ~/.virtualenvs
 $ export WORKON_HOME=~/.virtualenvs
 $ nano ~/.bashrc
-$ which python3
-$ python3 --version
-$ which python3.6
-$ python3.6 --version
-$ nano ~/.bashrc
-$ cd /usr/local/bin
-$ ls
-$ nano ~/.bashrc
-$ exit
+```
+
+En el archivo .bashrc, agregar las siguientes líneas al final:
+```
+VIRTUALENVWRAPPER_PYTHON='/usr/bin/python3.6' # This needs to be placed before the virtualenvwrapper command
+
+source /usr/local/bin/virtualenvwrapper.sh
+```
+
+Ahora, grabar archivo y cerrar nano. Al cerrar la Terminal y abrir una nueva, ya puedo ejecutar los siguientes comandos de virtualenv:
+```
+$ lsvirtuaenv # lists all virtual environments created
+$ mkvirtualenv virtualenv_name # Create virtualenv
+$ workon virtualenv_name # Activate/switch to a virtualenv
+$ deactivate virtualenv_name # Deactivate virtualenv
+```
+
+Para probar, creo el ambiente para continuar el curso:
+```
 $ mkvirtualenv superlists
-$ deactivate
+(superlists) gerardo@humaya:~$
+(superlists) gerardo@humaya:~$ deactivate
 $ workon superlists
-$ python --version
-$ deactivate
-$ mk_project xx
-$ exit
-$ nano ~/.bash_history
-$ pwd
+(superlists) gerardo@humaya:~$ python --version
+(superlists) gerardo@humaya:~$ deactivate
+```
+
+
+```
+
 $ ls
 $ cp ~/.bash_history ~/Downloads/bashHistory.txt
 $ cd Downloads/
