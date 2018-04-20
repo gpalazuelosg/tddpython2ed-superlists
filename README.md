@@ -1,17 +1,23 @@
 # Python, Django y TDD
-Documentar los pasos ejecutados mientras leo libro [Python TDD Book] en 2da. edición.
+Documentar los pasos ejecutados para habilitar un sistema de pruebas mientras leo el libro [Python TDD Book] en 2da. edición.
 ![](https://images-na.ssl-images-amazon.com/images/I/51q3VZT%2BseL._SX379_BO1,204,203,200_.jpg)]
 
 La razón de documentar es sencilla:
-  - Repetir exactamente los pasos inicializar un nuevo VM con servidor Ubuntu con Python 3.6 para desarrollar, en 1 hora
+  - Repetir exactamente los pasos para habilitar, en 1 hora, una nueva Virtual Machine (VM) con Ubuntu Desktop 16.04 con Python 3.6 para desarrollar.
   - Instalar NVM y NodeJS
   - Instalar VSCode 
   - Generar llaves SSH para actualizar en GitHub y BitBucket.
+  - Python 3.6
+  - Geckodriver
+  - Django
+  - Selenium
 
-### Preparando mi VM con Linux Ubuntu 16.04
-Scripts ejecutados en Ubuntu 16.04 primero para instalar los programas, librerías y herramientas necesarias para trabajar con el libro. Algunos pasos deben ser actualizados, como version de geckodriver. 
+## Cómo se supone que debo leer esto?
+Los scripts mencionados en esta guía, deben ser ejecutados en un sistema Ubuntu Desktop 16.04 recién instalado. He detallado solo los pasos para instalar los programas, librerías y herramientas necesarias para trabajar con el libro. Debes saber cómo usar la terminal.
 
-> Es ideal para iniciar en un nuevo Ubuntu, instalando Python 3.6, VSCode, NVM, Node, Geckodriver, Django y Selenium.
+Tengo pensado utilizar la misma guía para indicar cómo habilitar mis sistema para programar en golang. Pendiente.
+
+> Para continuar, asumo que ya tienes VirtualBox instalado. Te has descargado e instalado Linux Ubuntu Desktop 16.04. De lo contrario, no continues leyendo.
 
 ## Instalación
 
@@ -26,7 +32,7 @@ $ git config --global push.default simple
 ### Instalar Node
 
 Conozco dos formas de instalar node. 
-  - Usando NVM
+  - Usando NVM (mi preferida)
   - Usando apt-get
 
 Puedo usar cualquier opción. La de apt-get recibe actualizaciones. Con nvm otra yo controlo cuando instalar, cual versión. Dejo las dos formas como referencia.
@@ -47,7 +53,7 @@ $ sudo apt-get install -y build-essential
 $ sudo apt install curl
 $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.9/install.sh | bash
 $ nvm --version
-exit       # close Terminal and open a new one
+$ exit       # close Terminal and open a new one
 $ nvm --version
 $ nvm ls-remote --lts
 $ nvm install --lts    # this install latest LTS Node version
@@ -128,6 +134,8 @@ $ workon superlists
 
 ### Instalar Visual Studio Code
 
+Referencia: https://code.visualstudio.com/docs/setup/linux
+
 ```
 $ curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
 $ sudo mv microsoft.gpg /etc/apt/trusted.gpg.d/microsoft.gpg
@@ -162,8 +170,10 @@ Como referencia, revisa la páginas de github:
 
 
 ### Instalar geckodriver
-Find the latest release for your OS:
-	https://github.com/mozilla/geckodriver/releases
+Encontrar la última versión del geckodriver para cualquier sistema operativo:
+  - https://github.com/mozilla/geckodriver/releases
+
+Al momento de actualizar esta guía, era _geckodriver-v0.20.1-linux64.tar.gz_
 
 ```
 $ cd ~/Downloads/
