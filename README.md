@@ -351,3 +351,67 @@ También use:
 
    [Python TDD Book]: <https://www.amazon.com/Test-Driven-Development-Python-Selenium-JavaScript/dp/1491958707/ref=sr_1_1/131-5649203-4499659?s=books&ie=UTF8&qid=1519889044&sr=1-1&refinements=p_27%3AHarry+Percival>
    [Dillinger.io]: <https://dillinger.io/>
+
+## Errores
+
+### Python y pip
+Nota: 
+(2018-05-11) Después de una actualización de sistema (al hacer apt-get update...), pip comenzó a tirar un error:
+´´´
+none@horizon:/usr/bin$ pip3 --version
+Traceback (most recent call last):
+  File "/usr/local/bin/pip3", line 7, in <module>
+    from pip._internal import main
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/__init__.py", line 42, in <module>
+    from pip._internal import cmdoptions
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/cmdoptions.py", line 16, in <module>
+    from pip._internal.index import (
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/index.py", line 25, in <module>
+    from pip._internal.download import HAS_TLS, is_url, path_to_url, url_to_path
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/download.py", line 35, in <module>
+    from pip._internal.locations import write_delete_marker_file
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/locations.py", line 10, in <module>
+    from distutils import sysconfig as distutils_sysconfig
+ImportError: cannot import name 'sysconfig'
+Error in sys.excepthook:
+Traceback (most recent call last):
+  File "/usr/lib/python3/dist-packages/apport_python_hook.py", line 63, in apport_excepthook
+    from apport.fileutils import likely_packaged, get_recent_crashes
+  File "/usr/lib/python3/dist-packages/apport/__init__.py", line 5, in <module>
+    from apport.report import Report
+  File "/usr/lib/python3/dist-packages/apport/report.py", line 30, in <module>
+    import apport.fileutils
+  File "/usr/lib/python3/dist-packages/apport/fileutils.py", line 23, in <module>
+    from apport.packaging_impl import impl as packaging
+  File "/usr/lib/python3/dist-packages/apport/packaging_impl.py", line 23, in <module>
+    import apt
+  File "/usr/lib/python3/dist-packages/apt/__init__.py", line 23, in <module>
+    import apt_pkg
+ModuleNotFoundError: No module named 'apt_pkg'
+
+Original exception was:
+Traceback (most recent call last):
+  File "/usr/local/bin/pip3", line 7, in <module>
+    from pip._internal import main
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/__init__.py", line 42, in <module>
+    from pip._internal import cmdoptions
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/cmdoptions.py", line 16, in <module>
+    from pip._internal.index import (
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/index.py", line 25, in <module>
+    from pip._internal.download import HAS_TLS, is_url, path_to_url, url_to_path
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/download.py", line 35, in <module>
+    from pip._internal.locations import write_delete_marker_file
+  File "/usr/local/lib/python3.6/dist-packages/pip/_internal/locations.py", line 10, in <module>
+    from distutils import sysconfig as distutils_sysconfig
+**ImportError: cannot import name 'sysconfig'**
+none@horizon:/usr/bin$
+´´´
+
+El error se ve aquí: ImportError: cannot import name 'sysconfig'
+
+En este link comentan lo siguiente: Está relacionado con instalaciones hechas con el ppa: ´´´ppa:jonathonf/python-3.6´´´
+
+Para solucionarlo, ejecute el siguiente comando:
+´´´sudo apt-get install python3-distutils´´´
+
+Y mi pip comenzó a funcionar nuevamente.
