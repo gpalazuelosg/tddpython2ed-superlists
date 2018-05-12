@@ -357,7 +357,7 @@ También use:
 ### Python y pip
 Nota: 
 (2018-05-11) Después de una actualización de sistema (al hacer apt-get update...), pip comenzó a tirar un error:
-´´´
+```
 none@horizon:/usr/bin$ pip3 --version
 Traceback (most recent call last):
   File "/usr/local/bin/pip3", line 7, in <module>
@@ -405,13 +405,16 @@ Traceback (most recent call last):
     from distutils import sysconfig as distutils_sysconfig
 **ImportError: cannot import name 'sysconfig'**
 none@horizon:/usr/bin$
-´´´
+```
 
 El error se ve aquí: ImportError: cannot import name 'sysconfig'
 
-En este link comentan lo siguiente: Está relacionado con instalaciones hechas con el ppa: ´´´ppa:jonathonf/python-3.6´´´
+En este [link](https://github.com/pypa/pip/issues/5367#issuecomment-386864941) comentan lo siguiente: Está relacionado con instalaciones hechas con el ppa: 
+```ppa:jonathonf/python-3.6```
 
 Para solucionarlo, ejecute el siguiente comando:
-´´´sudo apt-get install python3-distutils´´´
+```
+$ sudo apt-get install python3-distutils
+```
 
 Y mi pip comenzó a funcionar nuevamente.
