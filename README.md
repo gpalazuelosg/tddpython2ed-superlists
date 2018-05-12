@@ -132,6 +132,13 @@ $ workon superlists
 (superlists) gerardo@humaya:~$ deactivate
 ```
 
+#### Nota: Para Windows
+La siguiente referencia es para Windows. Es posible usar el mkvirtualenv en Windows. Revisa:
+
+  - [virtualenvwrapper - Instalación](http://virtualenvwrapper.readthedocs.io/en/latest/install.html) 
+  - [virtualenvwrapper-win](https://pypi.org/project/virtualenvwrapper-win/)
+
+
 
 ### Instalar Visual Studio Code
 
