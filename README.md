@@ -337,6 +337,69 @@ O corre (compila y ejecuta) en una sola línea:
 $ go run src/helloworld/hello.go
 ```
 
+## Instalar Docker
+
+### Preparar paquetes apt en Ubuntu
+
+Referencias: 
+  - https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
+
+```
+$ cd ~/Downloads/
+$ sudo apt-get update
+$ sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+$ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+```
+
+Verify that you now have the key with the fingerprint 9DC8 5822 9FC7 DD38 854A E2D8 8D81 803C 0EBF CD88, by searching for the last 8 characters of the fingerprint.
+
+```
+$ sudo apt-key fingerprint 0EBFCD88
+
+pub   4096R/0EBFCD88 2017-02-22
+      Key fingerprint = 9DC8 5822 9FC7 DD38 854A  E2D8 8D81 803C 0EBF CD88
+uid                  Docker Release (CE deb) <docker@docker.com>
+sub   4096R/F273FCD8 2017-02-22
+```
+
+Use the following command to set up the stable repository. You always need the stable repository, even if you want to install builds from the edge or test repositories as well. To add the edge or test repository, add the word edge or test (or both) after the word stable in the commands below.
+
+    Note: The lsb_release -cs sub-command below returns the name of your Ubuntu distribution, such as xenial. Sometimes, in a distribution like Linux Mint, you might need to change $(lsb_release -cs) to your parent Ubuntu distribution. For example, if you are using Linux Mint Rafaela, you could use trusty.
+
+```
+$ sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+```
+
+### Ahora si, instalar Docker CE
+```
+$ sudo apt-get update
+$ sudo apt-get install docker-ce
+```
+
+o instalar una version en especifico:
+
+List the versions available in your repo:
+```
+$ apt-cache madison docker-ce
+```
+
+Install a specific version by its fully qualified package name, which is the package name (docker-ce) plus the version string (2nd column) up to the first hyphen, separated by a an equals sign (=), for example, docker-ce=18.03.0.ce.
+```
+$ sudo apt-get install docker-ce=<VERSION>
+```
+
+Verify that Docker CE is installed correctly by running the hello-world image.
+```
+$ sudo docker run hello-world
+```
+
 
 ## Generar Markdown
 Para generar el markdown me apoye con [Dillinger.io].
