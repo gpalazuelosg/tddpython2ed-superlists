@@ -343,6 +343,7 @@ $ go run src/helloworld/hello.go
 
 Referencias: 
   - https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
+  - https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-16-04
 
 ```
 $ cd ~/Downloads/
@@ -400,6 +401,130 @@ Verify that Docker CE is installed correctly by running the hello-world image.
 $ sudo docker run hello-world
 ```
 
+### Ejecutar comando docker sin utilizar sudo (opcional)
+
+By default, running the docker command requires root privileges — that is, you have to prefix the command with sudo. It can also be run by a user in the docker group, which is automatically created during the installation of Docker. If you attempt to run the docker command without prefixing it with sudo or without being in the docker group, you'll get an output like this:
+```
+docker: Cannot connect to the Docker daemon. Is the docker daemon running on this host?.
+See 'docker run --help'.
+```
+
+If you want to avoid typing sudo whenever you run the docker command, add your username to the docker group:
+
+```
+$ sudo usermod -aG docker ${USER}
+```
+
+To apply the new group membership, you can log out of the server and back in, or you can type the following:
+```
+$ su - ${USER}
+```
+
+You will be prompted to enter your user's password to continue. Afterwards, you can confirm that your user is now added to the docker group by typing:
+```
+$ id -nG
+
+sammy sudo docker
+```
+
+### Comandos docker
+
+```
+$ docker run hello-world
+$ docker search ubuntu
+$ docker pull ubuntu
+$ docker run ubuntu
+$ docker images
+```
+
+### Ejecutando un container docker
+
+The combination of the -i and -t switches gives you interactive shell access into the container. We can also run linux commands while on the container sheel.
+
+```
+$ docker run -it ubuntu
+root@d9b100f2f636:/#
+
+$ apt-get update
+$ apt-get install -y nodejs
+```
+
+### Committing Changes in a Container to a Docker Image
+
+When you start up a Docker image, you can create, modify, and delete files just like you can with a virtual machine. The changes that you make will only apply to that container. You can start and stop it, but once you destroy it with the ```docker rm``` command, the changes will be lost for good.
+
+This section shows you how to save the state of a container as a new Docker image.
+
+After installing nodejs inside the Ubuntu container, you now have a container running off an image, but the container is different from the image you used to create it.
+
+To save the state of the container as a new image, first exit from it:
+```
+exit
+```
+
+Then commit the changes to a new Docker image instance using the following command. The -m switch is for the commit message that helps you and others know what changes you made, while -a is used to specify the author. The container ID is the one you noted earlier in the tutorial when you started the interactive docker session. Unless you created additional repositories on Docker Hub, the repository is usually your Docker Hub username:
+
+```
+docker commit -m "What did you do to the image" -a "Author Name" container-id repository/new_image_name
+docker commit -m "added node.js" -a "Sunday Ogwu-Chinuwa" d9b100f2f636 finid/ubuntu-nodejs
+```
+
+> Note: When you commit an image, the new image is saved locally, that is, on your computer. Later in this tutorial, you'll learn how to push an image to a Docker registry like Docker Hub so that it may be assessed and used by you and others.
+
+After that operation has completed, listing the Docker images now on your computer should show the new image, as well as the old one that it was derived from:
+
+```
+$ docker images
+
+finid/ubuntu-nodejs       latest              62359544c9ba        50 seconds ago      206.6 MB
+```
+
+In the above example, ubuntu-nodejs is the new image, which was derived from the existing ubuntu image from Docker Hub. The size difference reflects the changes that were made. And in this example, the change was that NodeJS was installed. So next time you need to run a container using Ubuntu with NodeJS pre-installed, you can just use the new image. Images may also be built from what's called a Dockerfile. But that's a very involved process that's well outside the scope of this article.
+
+### Listing Docker Containers
+```
+$ docker ps
+
+CONTAINER ID        IMAGE               COMMAND             CREATED             STATUS              PORTS               NAMES
+f7c79cc556dd        ubuntu              "/bin/bash"         3 hours ago         Up 3 hours                              silly_spence
+```
+
+To view all containers — active and inactive, pass it the -a switch:
+```
+$ docker ps -a
+```
+
+To view the latest container you created, pass it the -l switch:
+```
+$ docker ps -l
+```
+
+Stopping a running or active container is as simple as typing:
+```
+$ docker stop container-id
+```
+
+### Pushing Docker Images to a Docker Repository
+The next logical step after creating a new image from an existing image is to share it with a select few of your friends, the whole world on Docker Hub, or other Docker registry that you have access to. To push an image to Docker Hub or any other Docker registry, you must have an account there.
+
+This section shows you how to push a Docker image to Docker Hub. To learn how to create your own private Docker registry, check out [How To Set Up a Private Docker Registry on Ubuntu 14.04](http://virtualenvwrapper.readthedocs.io/en/latest/install.html).
+
+
+To create an account on [Docker Hub](https://hub.docker.com/), register at Docker Hub. Afterwards, to push your image, first log into Docker Hub. You'll be prompted to authenticate:
+```
+$ docker login -u docker-registry-username
+```
+
+If you specified the correct password, authentication should succeed. Then you may push your own image using:
+```
+$ docker push docker-registry-username/docker-image-name
+
+The push refers to a repository [docker.io/finid/ubuntu-nodejs]
+...
+```
+
+After pushing an image to a registry, it should be listed on your account's dashboard
+
 
 ## Generar Markdown
 Para generar el markdown me apoye con [Dillinger.io].
@@ -407,6 +532,7 @@ Para generar el markdown me apoye con [Dillinger.io].
 También use:
   - [pandao.github.io/editor.md](https://pandao.github.io/editor.md/examples/full.html)
   - [stackedit.io](https://stackedit.io/app)
+  - [markdowntutorial.com](https://www.markdowntutorial.com/)
 
 
 ## To-Do:
