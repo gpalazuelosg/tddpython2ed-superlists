@@ -322,7 +322,7 @@ go version go1.12.5 linux/amd64
 ```
 
 Crear un Workspace para trabajar con go; donde go construirá/compilará archivos --- nota que esto va de la mano de la instalación de go, ver el punto previo:
-```
+```bash
 $ mkdir $HOME/go
 ```
 
@@ -333,7 +333,7 @@ $ export GOPATH=$HOME/Projects/22gosandbox22
 ```
 
 Dentro de $HOME/go, generar otros folders "src", "bin" y "pkg" que son los usados en los libros. Dentro de "src", generar otro folder "helloworld" y generar un archivo con extension ".go".
-```
+```bash
 $ cd $HOME/go
 $ mkdir src bin pkg
 $ mkdir src/helloworld
@@ -341,7 +341,7 @@ $ cd src/helloworld
 $ nano hello.go
 ```
 Estando en nano editando hello.go, pegar el siguiente código:
-```
+```go
 package main
 
 import "fmt"
@@ -351,20 +351,20 @@ func main() {
 }
 ```
 Compilar el programa y ejecutarlo:
-```
+```bash
 $ cd ../..    # moverse a raiz de gosandbox
 $ go install src/helloworld/hello.go
 $ ./bin/hello
 ```
 
 El programa imprime el mensaje hello world:
-```
+```bash
 $ ./bin/hello 
 hello, world
 ```
 
 O corre (compila y ejecuta) en una sola línea:
-```
+```bash
 $ go run src/helloworld/hello.go
 ```
 
