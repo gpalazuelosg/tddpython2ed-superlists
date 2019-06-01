@@ -193,13 +193,13 @@ _esta guia necesita ser actualizado despues de esta linea_
 Encontrar la última versión del geckodriver para cualquier sistema operativo:
   - https://github.com/mozilla/geckodriver/releases
 
-Al momento de actualizar esta guía, era _geckodriver-v0.20.1-linux64.tar.gz_
+Al momento de actualizar esta guía, era _geckodriver-v0.24.0-linux64.tar.gz_
 
 ```
 $ cd ~/Downloads/
-$ wget https://github.com/mozilla/geckodriver/releases/download/v0.20.1/geckodriver-v0.20.1-linux64.tar.gz
-$ tar -xvzf geckodriver-v0.18.0-linux64.tar.gz
-$ rm geckodriver-v0.18.0-linux64.tar.gz
+$ wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+$ tar -xvzf geckodriver-v0.24.0-linux64.tar.gz
+$ rm geckodriver-v0.24.0-linux64.tar.gz
 $ chmod +x geckodriver
 $ cp geckodriver /usr/local/bin/
 $ sudo cp geckodriver /usr/local/bin/
@@ -239,13 +239,31 @@ origin	git@github.com:gpalazuelosg/tddpython2ed-superlists.git (push)
 
 Ahora, con el código actual del repositorio, probar que todo funcione (Python + VirtualEnv + Django + Geckodriver):
 
-```
+_lo siguiente es si NO tengo repositorio creado_
+
+```bash
 $ cd ~/Projects/
 $ git clone git@github.com:gpalazuelosg/tddpython2ed-superlists.git
 $ cd tddpython2ed-superlists/
-$ workon superlists
+$ python3 -m venv venv
+$ source venv/bin/activate
 $ pip3 install "django<1.12" "selenium<4"
 $ pip freeze > requirements.txt
+$ python functional_tests.py 
+$ deactivate
+```
+
+_lo siguiente es si YA tengo repositorio creado y requirements.txt tiene contenido_
+
+Solo asegurate que dependencias se cumplan: `"django<1.12" "selenium<4"`
+
+```bash
+$ cd ~/Projects/
+$ git clone git@github.com:gpalazuelosg/tddpython2ed-superlists.git
+$ cd tddpython2ed-superlists/
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip3 install -r requirements.txt
 $ python functional_tests.py 
 $ deactivate
 ```
