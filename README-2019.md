@@ -283,8 +283,8 @@ Referencias:
 
 ```
 $ cd ~/Downloads/
-$ sudo curl -O https://dl.google.com/go/go1.10.1.linux-amd64.tar.gz
-$ sudo tar -xvf go1.10.1.linux-amd64.tar.gz
+$ sudo curl -O https://dl.google.com/go/go1.12.5.linux-amd64.tar.gz
+$ sudo tar -xvf go1.12.5.linux-amd64.tar.gz
 $ sudo mv go /usr/local
 ```
 En este punto, go ha sido descargado, descomprimido y movido al folder /usr/local. Ahora seguimos actualizando las rutas de go (paths).
@@ -302,7 +302,7 @@ Hasta el final del archivo, agregar las siguientes líneas. Grabar archivo y sal
 
 ```
 export GOROOT=/usr/local/go
-export GOPATH=$HOME/Projects/gosandbox
+export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
 
@@ -318,12 +318,12 @@ $ source ~/.profile
 Comprobar que go está instalado. Debería imprimir algo como se muestra debajo de la ejecución del comando.
 ```
 $ go version
-go version go1.10.1 linux/amd64
+go version go1.12.5 linux/amd64
 ```
 
 Crear un Workspace para trabajar con go; donde go construirá/compilará archivos --- nota que esto va de la mano de la instalación de go, ver el punto previo:
 ```
-$ mkdir $HOME/Projects/gosandbox
+$ mkdir $HOME/go
 ```
 
 Ahora apuntar go al nuevo folder sandbox creado para ello.
@@ -332,9 +332,10 @@ Ahora apuntar go al nuevo folder sandbox creado para ello.
 $ export GOPATH=$HOME/Projects/22gosandbox22
 ```
 
-"gosandbox" es el folder de pruebas. Dentro de el, generar otro folder "src", generar otro folder "helloworld" y generar un archivo con extension ".go".
+Dentro de $HOME/go, generar otros folders "src", "bin" y "pkg" que son los usados en los libros. Dentro de "src", generar otro folder "helloworld" y generar un archivo con extension ".go".
 ```
-$ cd $HOME/Projects/gosandbox
+$ cd $HOME/go
+$ mkdir src bin pkg
 $ mkdir src/helloworld
 $ cd src/helloworld
 $ nano hello.go
