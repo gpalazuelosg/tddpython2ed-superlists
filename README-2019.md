@@ -1,4 +1,5 @@
-# Python, Django y TDD - 2019
+# Python, Django y TDD
+### Actualizado 2019-08
 Documentar los pasos ejecutados para habilitar un sistema de pruebas mientras leo el libro [Python TDD Book] en 2da. edición.
 ![](https://images-na.ssl-images-amazon.com/images/I/51q3VZT%2BseL._SX379_BO1,204,203,200_.jpg)]
 
@@ -17,7 +18,7 @@ Los scripts mencionados en esta guía, deben ser ejecutados en un sistema Ubuntu
 
 Tengo pensado utilizar la misma guía para indicar cómo habilitar mis sistema para programar en golang. Pendiente.
 
-> Para continuar, asumo que ya tienes VirtualBox instalado. Te has descargado e instalado `Linux Ubuntu Desktop 18.04.02`. De lo contrario, no continues leyendo.
+> Para continuar, asumo que ya tienes VirtualBox instalado. Te has descargado, instalado y actualizado `Linux Ubuntu Desktop 18.04.03`. De lo contrario, no continues leyendo.
 
 ## Instalación
 
@@ -37,19 +38,8 @@ Conozco dos formas de instalar node.
 
 Puedo usar cualquier opción. La de apt-get recibe actualizaciones. Con nvm otra yo controlo cuando instalar, cual versión. Dejo las dos formas como referencia.
 
-#### Instalar NodeJS 8.x usando apt-get
-```
-$ cd Downloads/
-$ sudo apt install curl
-$ curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
-$ rm nodesource_setup.sh 
-$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
-$ sudo apt-get install -y nodejs
-$ sudo apt-get install -y build-essential
-```
-
-#### Instalar NodeJS 8.x usando nvm
-```
+#### Instalar NodeJS 8.x usando nvm (preferida)
+```bash
 $ cd Downloads/
 $ sudo apt install curl
 $ curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
@@ -64,29 +54,48 @@ $ npm --version
 $ nvm --version
 ```
 
-### Instalar Python 3.6 y Python 3.7
 
-En Ubuntu 18.04.02 ya esta instalado Python 3.6. Eso puede ser suficiente. Si quieres instalar Python 3.7, prosigue. 
-
+#### Instalar NodeJS 8.x usando apt-get
+```bash
+$ cd Downloads/
+$ sudo apt install curl
+$ curl -sL https://deb.nodesource.com/setup_10.x -o nodesource_setup.sh
+$ rm nodesource_setup.sh 
+$ curl -sL https://deb.nodesource.com/setup_10.x | sudo -E bash -
+$ sudo apt-get install -y nodejs
+$ sudo apt-get install -y build-essential
 ```
+
+
+### Instalar Python 3.7
+
+En Ubuntu 18.04.03 ya esta instalado Python 3.6. Eso puede ser suficiente. Pero yo quiero instalar Python 3.7. 
+
+```bash
 $ sudo apt-get update && sudo apt-get upgrade -y
-$ sudo apt install software-properties-common
-$ exit
-$ sudo add-apt-repository ppa:deadsnakes/ppa
->> presionar ENTER cuando pregunta *Press [ENTER] to continue or Ctrl-c to cancel adding it*. <<
-$ sudo apt-get update
-$ sudo apt install python3.7
+$ sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
+$ cd /usr/src
+$ sudo wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
+$ sudo tar xzf Python-3.7.4.tgz
+$ cd Python-3.7.4
+$ sudo ./configure --enable-optimizations
+$ sudo make altinstall      # this step takes several seconds
+
+
 $ python --version
 $ python3 --version
 $ python3.7 --version
 ```
 
-Instalar pip3:
+```make altinstall``` is used to prevent replacing the default python binary file /usr/bin/python.
 
-```
-$ sudo apt-get install build-essential libssl-dev libffi-dev python3.6-dev
-$ sudo apt-get install build-essential libssl-dev libffi-dev python3.7-dev
-$ sudo apt install python3-pip
+
+Instalar pip3 y pipenv:
+
+```bash
+$ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+$ python get-pip.py
+$ pip3 install pipenv
 ```
 
 Para revisar la historia de comandos hasta ahora:
@@ -255,7 +264,7 @@ $ deactivate
 
 _lo siguiente es si YA tengo repositorio creado y requirements.txt tiene contenido_
 
-Solo asegurate que dependencias se cumplan: `"django<1.12" "selenium<4"`
+Solo asegurate que ```requirements.txt``` tenga: `"django<1.12" "selenium<4"`
 
 ```bash
 $ cd ~/Projects/
@@ -572,6 +581,17 @@ También use:
 
    [Python TDD Book]: <https://www.amazon.com/Test-Driven-Development-Python-Selenium-JavaScript/dp/1491958707/ref=sr_1_1/131-5649203-4499659?s=books&ie=UTF8&qid=1519889044&sr=1-1&refinements=p_27%3AHarry+Percival>
    [Dillinger.io]: <https://dillinger.io/>
+
+
+## Referencias:
+  - [Instalar Python 3.7 en Ubuntu 18.04](https://tecadmin.net/install-python-3-7-on-ubuntu-linuxmint/)
+  - [Versiones en requirements.txt](https://stackoverflow.com/questions/50842144/requirements-txt-greater-than-equal-to-and-then-less-than)
+  - [Instalar pypenv](https://djangoforbeginners.com/initial-setup/)
+  - [Instalar pip](https://pip.pypa.io/en/stable/installing/)
+
+
+
+
 
 ## Errores
 
