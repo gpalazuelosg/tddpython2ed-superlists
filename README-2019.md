@@ -569,6 +569,60 @@ After pushing an image to a registry, it should be listed on your account's dash
 
 ## Instalar PHP y Laravel
 
+ref. 
+https://php.tutorials24x7.com/blog/how-to-install-php-7-on-ubuntu-1804-lts
+https://apache.tutorials24x7.com/blog/how-to-install-apache-2-on-ubuntu-1804-lts
+https://php.tutorials24x7.com/blog/how-to-install-php-for-nginx-on-ubuntu-1804-lts
+https://nginx.tutorials24x7.com/blog/how-to-install-and-configure-nginx-on-ubuntu-18-04-lts
+https://apache.tutorials24x7.com/blog/how-to-install-apache-2-on-ubuntu-1804-lts
+
+
+----
+https://php.tutorials24x7.com/blog/how-to-install-php-7-on-ubuntu-1804-lts
+
+```bash
+# Refresh package indexes
+$ sudo apt-get update
+
+# Install PHP 7.2 on Ubuntu 18.04 LTS
+$ sudo apt-get install php7.2
+
+# Autoclean
+$ sudo apt-get autoclean
+
+# Autoremove
+$ sudo apt-get autoremove # or sudo apt-get --purge autoremove
+
+# Install FPM Extension
+$ sudo apt-get install php7.2-fpm
+
+# Install MySQL Extension
+$ sudo apt-get install php7.2-mysql
+
+
+# required
+$ sudo apt-get install -y php7.2 php7.2-mysql libapache2-mod-php7.2 php7.2-opcache php7.2-zip
+
+# optionals:
+$ sudo apt-get install php7.2-cgi php7.2-cli php7.2-curl php7.2-json php7.2-gd php-imagick php7.2-mbstring php7.2-intl php7.2-pspell php7.2-imap php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl php7.2-fpm
+
+```
+
+It will ask to confirm the installation. Press Y and hit Enter to confirm the installation. The above-mentioned command will install the PHP at /usr/bin/php7.2 and place the configuration file at /etc/php/7.2/cli/php.ini.
+
+
+Install OPcache to enable caching at the bytecode level.
+
+```bash
+# Install OPcache extension
+$ sudo apt-get install php7.2-opcache
+```
+
+Install the extensions to handle compressed files.
+```bash
+# Install Zip
+$ sudo apt-get install php7.2-zip
+```
 
 
 
@@ -635,6 +689,11 @@ https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-elasticsearc
 https://linuxize.com/post/how-to-install-the-latest-eclipse-ide-on-ubuntu-18-04/
 
 
+https://php.tutorials24x7.com/blog/how-to-install-eclipse-for-php-on-ubuntu
+https://php.tutorials24x7.com/blog/how-to-install-eclipse-for-php-on-ubuntu-using-pdt
+
+
+
 Download and extract Eclipse package to your desired directory (Ex. /usr/).
 
 Then, symlink the eclipse executable to /usr/bin path so that all users on your machine can able to use Eclipse IDE.
@@ -676,6 +735,9 @@ $ eclipse
 ref.
 https://linuxize.com/post/how-to-install-netbeans-on-ubuntu-18-04/
 
+https://php.tutorials24x7.com/blog/how-to-install-netbeans-11-for-php-on-ubuntu
+
+
 https://computingforgeeks.com/install-netbeans-ide-on-debian-ubuntu-and-linux-mint/
 https://computingforgeeks.com/how-to-install-java-11-on-ubuntu-18-04-16-04-debian-9/
 
@@ -691,6 +753,34 @@ Si todo termina bien, leeremos:
 ```bash
 netbeans 10.0 from 'apache-netbeans' installed
 ```
+
+O, 
+
+https://www-us.apache.org/dist/incubator/netbeans/incubating-netbeans/
+
+https://www-us.apache.org/dist/incubator/netbeans/incubating-netbeans/incubating-11.0/incubating-netbeans-11.0-bin.zip
+
+
+#### Extract the Download
+
+Now extract the downloaded zip and move it to the appropriate location. Also, locate the executable files in the bin directory
+
+##### Make Shortcut.
+In this step, we will install the GNOME panel and use the same to create a desktop shortcut to execute the NetBeans installed by us in previous steps.
+```bash
+# Refresh packages index
+$ sudo apt-get update
+
+# Install GNOME Panel
+$ sudo apt-get install --no-install-recommends gnome-panel
+
+# Create Desktop icon
+$ gnome-desktop-item-edit ~/Desktop/ --create-new
+```
+
+pending...
+
+
 
 
 
