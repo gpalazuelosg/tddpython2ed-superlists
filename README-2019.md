@@ -567,6 +567,143 @@ The push refers to a repository [docker.io/finid/ubuntu-nodejs]
 After pushing an image to a registry, it should be listed on your account's dashboard
 
 
+## Instalar PHP y Laravel
+
+
+
+
+## Instalar Java
+
+Evitaremos instalar las versiones de Oracle debido al tema de licencias.
+Instaremos Java 8 de OpenJDK.
+E instalaremos Java 11 de Amazon Corretto JDK 11.
+
+
+```bash
+$ sudo apt install -y wget
+$ sudo apt install -y openjdk-8-jdk
+```
+
+Then verify the java version on the machine:
+```bash
+$ java -version
+openjdk version "1.8.0_222"
+OpenJDK Runtime Environment (build 1.8.0_222-8u222-b10-1ubuntu1~18.04.1-b10)
+OpenJDK 64-Bit Server VM (build 25.222-b10, mixed mode)
+```
+
+Para Amazon Corretto JDK 11, navegar a la siguiente webpage:
+https://aws.amazon.com/corretto/
+
+Para instalar, las instrucciones son:
+https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/generic-linux-install.html
+
+Descargar el instalador para Amazon Corretto JDK 11, de 64 bits. Actualmente el archivo es java-11-amazon-corretto-jdk_11.0.4.11-1_amd64.deb
+https://d3pxv6yz143wms.cloudfront.net/11.0.4.11.1/java-11-amazon-corretto-jdk_11.0.4.11-1_amd64.deb
+
+```bash
+$ sudo apt-get update && sudo apt-get install java-common
+$ sudo dpkg --install ~/Downloads/java-11-amazon-corretto-jdk_11.0.4.11-1_amd64.deb
+$ java -version
+openjdk version "11.0.4" 2019-07-16 LTS
+OpenJDK Runtime Environment Corretto-11.0.4.11.1 (build 11.0.4+11-LTS)
+OpenJDK 64-Bit Server VM Corretto-11.0.4.11.1 (build 11.0.4+11-LTS, mixed mode)
+```
+
+Si acaso no veo la versión de Amazon Corretto como la default:
+```bash
+$ sudo update-alternatives --config java
+$ sudo update-alternatives --config javac
+```
+
+
+
+Si quisiera desinstalar Amazon Corretto:
+```bash
+$ sudo dpkg --remove java-11-amazon-corretto-jdk
+```
+
+
+(Existe una opción para JDK 8 de Amazon Corretto, pero intento documentar diferentes pasos).
+
+
+
+## Instalar Eclipse
+ref. 
+https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-eclipse-ide-on-ubuntu-18-04-lts.html
+https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-ubuntu-18-04-ubuntu-16-04.html
+https://linuxize.com/post/how-to-install-the-latest-eclipse-ide-on-ubuntu-18-04/
+
+
+Download and extract Eclipse package to your desired directory (Ex. /usr/).
+
+Then, symlink the eclipse executable to /usr/bin path so that all users on your machine can able to use Eclipse IDE.
+
+```bash
+$ wget http://mirrors.xmission.com/eclipse/technology/epp/downloads/release/2019-09/R/eclipse-jee-2019-09-R-linux-gtk-x86_64.tar.gz
+$ sudo tar -zxvf eclipse-jee-2019-09-R-linux-gtk-x86_64.tar.gz -C /usr/
+$ sudo ln -s /usr/eclipse/eclipse /usr/bin/eclipse
+```
+
+Create Eclipse Launcher Icon.
+Sometimes you may want to have Eclipse launcher icon in GNOME or Dash just like in the Start menu of Windows.
+
+```bash
+$ sudo nano /usr/share/applications/eclipse.desktop
+```
+
+Use the following information in the above file.
+```bash
+[Desktop Entry]
+Encoding=UTF-8
+Name=Eclipse IDE
+Comment=Eclipse IDE
+Exec=/usr/bin/eclipse
+Icon=/usr/eclipse/icon.xpm
+Terminal=false
+Type=Application
+StartupNotify=false
+```
+
+Start Eclipse IDE
+```bash
+$ eclipse
+```
+
+
+
+## Instalar Netbeans
+ref.
+https://linuxize.com/post/how-to-install-netbeans-on-ubuntu-18-04/
+
+https://computingforgeeks.com/install-netbeans-ide-on-debian-ubuntu-and-linux-mint/
+https://computingforgeeks.com/how-to-install-java-11-on-ubuntu-18-04-16-04-debian-9/
+
+
+
+Una vez instalado Java, hacer lo siguiente:
+
+```bash
+$ sudo snap install netbeans --classic
+```
+
+Si todo termina bien, leeremos:
+```bash
+netbeans 10.0 from 'apache-netbeans' installed
+```
+
+
+
+## Instalar IntelliJ IDEA Community Edition
+
+En caso de que quiera instalar Intellij IDEA, la versión gratuita.
+
+```bash
+$ sudo snap install intellij-idea-community --classic
+```
+
+
+
 ## Generar Markdown
 Para generar el markdown me apoye con [Dillinger.io].
 
@@ -594,6 +731,28 @@ También use:
 
 
 ## Errores
+
+### Visual Studio Code is unable to watch for file changes in this large workspace" (error ENOSPC)
+
+Referencia: 
+https://code.visualstudio.com/docs/setup/linux#_visual-studio-code-is-unable-to-watch-for-file-changes-in-this-large-workspace-error-enospc
+
+When you see this notification, it indicates that the VS Code file watcher is running out of handles because the workspace is large and contains many files. The current limit can be viewed by running:
+```bash
+$ cat /proc/sys/fs/inotify/max_user_watches
+8192
+```
+
+The limit can be increased to its maximum by editing ```/etc/sysctl.conf``` and adding this line to the end of the file:
+```bash
+fs.inotify.max_user_watches=524288
+```
+
+The new value can then be loaded in by running ```sudo sysctl -p```.
+
+
+
+
 
 ### Python y pip
 Nota: 
