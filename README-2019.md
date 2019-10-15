@@ -14,11 +14,31 @@ La razón de documentar es sencilla:
   - Selenium
 
 ## Cómo se supone que debo leer esto?
-Los scripts mencionados en esta guía, deben ser ejecutados en un sistema Ubuntu Desktop 18.04.02 recién instalado. He detallado solo los pasos para instalar los programas, librerías y herramientas necesarias para trabajar con el libro. Debes saber cómo usar la terminal.
+Los scripts mencionados en esta guía, deben ser ejecutados en un sistema Ubuntu Desktop 18.04.xy recién instalado. He detallado solo los pasos para instalar los programas, librerías y herramientas necesarias para trabajar con el libro. Asumo que sabes como usar la terminal.
 
-Tengo pensado utilizar la misma guía para indicar cómo habilitar mis sistema para programar en golang. Pendiente.
 
 > Para continuar, asumo que ya tienes VirtualBox instalado. Te has descargado, instalado y actualizado `Linux Ubuntu Desktop 18.04.03`. De lo contrario, no continues leyendo.
+
+
+## Después de instalar Ubuntu en VirtualBox
+
+Para acceder a los archivos del sistema host (en donde está instalado VirtualBox), debes hacer una configuración en VirtualBox para que el sistema host comparta archivos hacia las VMs.
+
+
+### Asignar nuevo grupo a usuario de VM
+Después de tener esa configuración, si desde la VM intentas acceder a los archivos del sistema host, normalmente dice "sf_<nombre_folder_compartido>", obtendremos error de acceso denegado.
+
+Falta correr algo en la VM para tener acceso:
+
+```bash
+$ sudo adduser [your-user-name] vboxsf
+```
+
+### Agregar nuevo método de entrada de teclado
+Después de eso, normalmente yo tengo que agregar el input keyboard method de Español. Ahora sería buen momento para aprovechar la próxima reiniciada del VM.
+
+Después de reiniciar la VM y ya tendremos acceso a las carpetas compartidas.
+
 
 ## Instalación
 
@@ -735,7 +755,11 @@ $ eclipse
 ref.
 https://linuxize.com/post/how-to-install-netbeans-on-ubuntu-18-04/
 
+https://www.gpsos.es/2019/05/instalacion-de-netbeans-11-y-jdk-8-en-ubuntu-18-04/
+
 https://php.tutorials24x7.com/blog/how-to-install-netbeans-11-for-php-on-ubuntu
+
+https://linuxize.com/post/how-to-install-netbeans-on-ubuntu-18-04/
 
 
 https://computingforgeeks.com/install-netbeans-ide-on-debian-ubuntu-and-linux-mint/
