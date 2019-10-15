@@ -644,6 +644,76 @@ Install the extensions to handle compressed files.
 $ sudo apt-get install php7.2-zip
 ```
 
+## Instalar Composer
+ref. 
+https://www.digitalocean.com/community/tutorials/how-to-install-and-use-composer-on-ubuntu-18-04
+https://tecadmin.net/install-php-composer-on-ubuntu/
+https://linuxize.com/post/how-to-install-and-use-composer-on-ubuntu-18-04/
+
+
+```bash
+$ sudo apt update
+$ sudo apt install curl php-cli php-mbstring git unzip
+$ cd ~
+$ curl -sS https://getcomposer.org/installer -o composer-setup.php
+$ sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+$ composer
+$ sudo chown -R $USER ~/.composer/
+```
+
+## Instalar Laravel
+Asumiendo que PHP y composer estan instalados
+
+ref.
+https://stackoverflow.com/questions/26376516/laravel-php-command-not-found
+
+```bash
+$ composer global require "laravel/installer"
+$ laravel
+laravel: command not found
+```
+
+Si obtenemos el error anterior, hacer lo siguiente:
+```bash
+$ nano ~/.bash_profile
+
+
+# agregar al archivo la siguiente linea:
+export PATH=~/.composer/vendor/bin:$PATH
+
+# ahora grabar el archivo
+# y entonces hacer source en bash:
+$ source ~/.bash_profile
+
+# intentar nuevamente commando laravel
+$ laravel
+Laravel Installer 2.1.0
+...
+```
+
+Instalar Laravel/Valet
+ref.
+https://vander.host/knowledgebase/laravel/install-guide-for-laravel-valet/
+https://cpriego.github.io/valet-linux/requirements
+https://laravel-news.com/valet-for-ubuntu-linux
+
+https://websiteforstudents.com/install-php-7-2-mcrypt-module-on-ubuntu-18-04-lts/
+
+
+```bash
+$ sudo apt-get install libnss3-tools jq xsel
+$ $ sudo apt-get install -y php7.2-cli php7.2-common php7.2-curl php7.2-json php7.2-mbstring php7.2-opcache php7.2-readline php7.2-xml php7.2-zip
+$ sudo apt install php-pear php7.2-dev libmcrypt-dev gcc make autoconf libc-dev pkg-config
+
+$ sudo apt install php-dev libmcrypt-dev php-pear
+$ sudo apt-get -y install gcc make autoconf libc-dev pkg-config
+$ sudo apt-get -y install libmcrypt-dev
+
+$ composer global require laravel/valet # no use esta
+$ composer global require cpriego/valet-linux
+$ valet install
+```
+
 
 
 ## Instalar Java
@@ -760,6 +830,7 @@ https://www.gpsos.es/2019/05/instalacion-de-netbeans-11-y-jdk-8-en-ubuntu-18-04/
 https://php.tutorials24x7.com/blog/how-to-install-netbeans-11-for-php-on-ubuntu
 
 https://linuxize.com/post/how-to-install-netbeans-on-ubuntu-18-04/
+https://ubunlog.com/como-instalar-flatpak-en-ubuntu/
 
 
 https://computingforgeeks.com/install-netbeans-ide-on-debian-ubuntu-and-linux-mint/
@@ -775,37 +846,8 @@ $ sudo snap install netbeans --classic
 
 Si todo termina bien, leeremos:
 ```bash
-netbeans 10.0 from 'apache-netbeans' installed
+netbeans 11.1 from 'apache-netbeans' installed
 ```
-
-O, 
-
-https://www-us.apache.org/dist/incubator/netbeans/incubating-netbeans/
-
-https://www-us.apache.org/dist/incubator/netbeans/incubating-netbeans/incubating-11.0/incubating-netbeans-11.0-bin.zip
-
-
-#### Extract the Download
-
-Now extract the downloaded zip and move it to the appropriate location. Also, locate the executable files in the bin directory
-
-##### Make Shortcut.
-In this step, we will install the GNOME panel and use the same to create a desktop shortcut to execute the NetBeans installed by us in previous steps.
-```bash
-# Refresh packages index
-$ sudo apt-get update
-
-# Install GNOME Panel
-$ sudo apt-get install --no-install-recommends gnome-panel
-
-# Create Desktop icon
-$ gnome-desktop-item-edit ~/Desktop/ --create-new
-```
-
-pending...
-
-
-
 
 
 ## Instalar IntelliJ IDEA Community Edition
@@ -815,6 +857,88 @@ En caso de que quiera instalar Intellij IDEA, la versión gratuita.
 ```bash
 $ sudo snap install intellij-idea-community --classic
 ```
+
+## Instalar apache2, mysql (MariaDB) en Ubuntu 18.04
+re. 
+https://tecadmin.net/install-mariadb-on-ubuntu-18-04-bionic/
+https://computingforgeeks.com/install-mariadb-10-on-ubuntu-18-04-and-centos-7/
+
+
+```bash
+$ sudo apt-get install software-properties-common
+$ sudo apt-get install apache2
+$ sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656F24C74CD1D8
+$ sudo nano /etc/apt/sources.list.d/mariadb.list
+```
+
+Grabar lo siguiente en el archivo y salir de nano:
+```
+# MariaDB 10.3 Repository
+deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main
+deb-src http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main
+```
+ó púde haber hecho lo siguiente:
+```
+$ sudo add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mariadb.mirror.liquidtelecom.com/repo/10.4/ubuntu $(lsb_release -cs) main"
+```
+
+Después instalar mariadb:
+```bash
+$ sudo apt update
+$ sudo apt install mariadb-server mariadb-client
+```
+
+La instalación de MariaDB registra un symlink "mysql" y además inicia el servicio.
+
+Verificar instalacion de MariaDB
+```bash
+$ sudo systemctl status mariadb
+```
+
+Deberia de leer algo como:
+```Active: active (running) since Mon 2019-10-14 23:35:24 MDT; 50s ago```
+
+Para conectar desde la shell a MariaDB:
+```bash
+$ mysql -u root -p
+```
+
+Asegurar la instalación de MariaDB:
+```bash
+$ sudo mysql_secure_installation
+```
+
+
+Stop, Start, status y restart de MariaDB:
+```bash
+$ sudo systemctl stop mariadb.service      # To Stop MariaDB service 
+$ sudo systemctl start mariadb.service     # To Start MariaDB service 
+$ sudo systemctl status mariadb.service    # To Check MariaDB service status 
+$ sudo systemctl restart mariadb.service   # To Stop then Start MariaDB service 
+```
+
+## Install DBeaver on Ubuntu 18.04
+ref. 
+https://computingforgeeks.com/install-and-configure-dbeaver-on-ubuntu-debian/
+https://dbeaver.io/download/
+
+
+Esto es un cliente de DB que depende de tener Java instalado.
+
+Una vez que Java esta instalado:
+```bash
+$ sudo wget -O - https://dbeaver.io/debs/dbeaver.gpg.key | sudo apt-key add -
+$ sudo echo "deb https://dbeaver.io/debs/dbeaver-ce /" | sudo tee /etc/apt/sources.list.d/dbeaver.list
+$ sudo apt-get update && sudo apt-get -y install dbeaver-ce
+$ apt policy  dbeaver-ce # check DBeaver version installed
+```
+
+https://netbeans.org/kb/docs/php/configure-php-environment-ubuntu.html
+https://computingforgeeks.com/how-to-install-latest-phpmyadmin-on-ubuntu-18-04-debian-9/
+https://computingforgeeks.com/
+https://tecadmin.net/install-phpmyadmin-in-ubuntu/
+
+https://netbeans.org/kb/docs/php/configure-php-environment-ubuntu.html
 
 
 
