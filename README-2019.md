@@ -699,6 +699,8 @@ https://laravel-news.com/valet-for-ubuntu-linux
 
 https://websiteforstudents.com/install-php-7-2-mcrypt-module-on-ubuntu-18-04-lts/
 
+https://scotch.io/tutorials/use-laravel-valet-for-a-super-quick-dev-server#toc-installing-valet
+
 
 ```bash
 $ sudo apt-get install libnss3-tools jq xsel
