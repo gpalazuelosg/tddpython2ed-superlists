@@ -597,6 +597,95 @@ https://nginx.tutorials24x7.com/blog/how-to-install-and-configure-nginx-on-ubunt
 https://apache.tutorials24x7.com/blog/how-to-install-apache-2-on-ubuntu-1804-lts
 
 
+### Usemos Linuxbrew, ya no mas!
+
+ref. https://docs.brew.sh/Homebrew-on-Linux
+
+```bash
+$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
+$ sudo apt-get install build-essential
+$ echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >>~/.profile
+
+# o
+gerardo@winterfell:~/Downloads$ /home/linuxbrew/.linuxbrew/bin/brew shellenv
+export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
+export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
+export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
+export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin${PATH+:$PATH}";
+export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
+export INFOPATH="/home/linuxbrew/.linuxbrew/share/info${INFOPATH+:$INFOPATH}";
+y pegarlos en archivo
+~/.bash_profile
+$ source ~/.bash_profile
+
+
+$ eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+$ brew install gcc
+$ brew install php@7.3
+$ brew install composer
+$ composer global require "laravel/installer"
+$ laravel
+laravel: command not found
+
+$ which composer
+/home/linuxbrew/.linuxbrew/bin/composer
+
+
+$ nano ~/.bash_profile
+
+
+# agregar al archivo la siguiente linea:
+export PATH=/home/linuxbrew/.linuxbrew/bin/composer:$PATH
+
+
+# ahora grabar el archivo
+# y entonces hacer source en bash:
+$ source ~/.bash_profile
+
+# aqui reiniciar la compu
+
+# despues, en este post:
+https://stackoverflow.com/questions/26376516/laravel-php-command-not-found
+
+
+e hice esto en Ubuntu y me funciono:
+
+
+I set the PATH,but it didn't work.I find other way to solve it. (OSX 10.10 & laravel 5.2)
+1) find the executable file:
+
+~/.composer/vendor/laravel/installer/laravel 
+
+2) give execute permissions:
+
+chmod +x ~/.composer/vendor/laravel/installer/laravel 
+
+3) make a soft link to /usr/bin:
+
+sudo ln -s /Users/zhao/.composer/vendor/laravel/installer/laravel /usr/bin/laravel
+
+
+
+edited Feb 8 '18 at 12:39
+JavaScript Learner
+74044 gold badges88 silver badges2020 bronze badges
+answered Jun 5 '16 at 6:42
+zhaolion
+412
+
+
+
+
+
+
+
+$ sudo nano /etc/sysctl.conf
+$ sudo sysctl -p
+
+```
+
+
+
 ----
 https://php.tutorials24x7.com/blog/how-to-install-php-7-on-ubuntu-1804-lts
 
