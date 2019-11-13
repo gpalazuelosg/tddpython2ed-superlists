@@ -206,116 +206,57 @@ $ sudo reboot
 
 #### Instalar Laravel
 
-Una vez que reiniciaste, después de instalar brew y composer, ahora intenta el Laravel installer.
-
-```bash
-$ composer global require "laravel/installer"
-
-# entre otras cosas, el sumatorio nos dice esto:
-Changed current directory to /home/gerardo/.config/composer
-```
-
-Si cierras terminal actual y abres nueva, el comando laravel no es reconocido. Lo que dicen los foros es que debemos agregar lo siguiente a nuestro ~/.profile:
-
-```bash
-export PATH=~/.composer/vendor/bin:$PATH
-```
-
-Pero como nosotros instalamos composer con Brew, la ruta es diferente.
-Para encontrar el folder de interes, nos basaremos en el path que antes nos arrojó la instalación de composer:
-```/home/gerardo/.config/composer```
-
-Si vamos dicho folder esto encontraremos:
-```bash
-$ which composer
-/home/linuxbrew/.linuxbrew/bin/composer
-$ cd /home/gerardo/.config/composer
-$ ls
-composer.json  composer.lock  vendor
-$ cd vendor
-$ cd bin
-$ ls
-laravel
-$ pwd
-/home/gerardo/.config/composer/vendor/bin
-```
-
-Entonces, la ruta de interes es:
-```/home/gerardo/.config/composer/vendor/bin```
-
-Ahroa, hacer lo siguiente:
-```bash
-$ nano ~/.profile
-
-# hasta el final del archivo, agregar una linea que sea como sigue:
-export PATH=/home/gerardo/.config/composer/vendor/bin:$PATH
-
-# ahorrate dolores de cabeza y reinicia de una vez!
-$ sudo reboot
-```
-
-Brew, Composer, Laravel installer y Python 3.7.5 estarán disponibles la próxima vez.
 
 
 
 
-#### Instalar Python 3.8
 
-En caso de terquedad ó porque no tienes ninguna versión actual de Python, lo siguiente ayuda a instalar Python 3.8.
 
-> Al instalar Php con Brew, se instaló Python 3.7.5. Eso ya es suficiente. Aún asi, los siguientes pasos son válidos para instala Python 3.8.
 
-En Ubuntu 18.04.03 ya esta instalado Python 3.6. Eso puede ser suficiente. Pero yo quiero instalar Python 3.8. 
+#### Instalar Python 3.7
+
+En Ubuntu 18.04.03 ya esta instalado Python 3.6. Eso puede ser suficiente. Pero yo quiero instalar Python 3.7. 
 
 ```bash
 $ sudo apt-get update && sudo apt-get upgrade -y
 $ sudo apt-get install libreadline-gplv2-dev libncursesw5-dev libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
 $ cd /usr/src
-$ sudo wget https://www.python.org/ftp/python/3.8.0/Python-3.8.0.tgz
-$ sudo tar xzf Python-3.8.0.tgz
-$ cd Python-3.8.0
+$ sudo wget https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
+$ sudo tar xzf Python-3.7.4.tgz
+$ cd Python-3.7.4
 $ sudo ./configure --enable-optimizations
 $ sudo make altinstall      # this step takes several seconds
 
 
 $ python --version
 $ python3 --version
-$ python3.8 --version
+$ python3.7 --version
 ```
 
 ```make altinstall``` is used to prevent replacing the default python binary file /usr/bin/python.
 
 
-#### Instalar pip3
-
-> Primero válida que no tengas pip3 instalado, ejecutando ```pip3 --version``` y procede solo si no lo tienes instalado.
+Instalar pip3 y pipenv:
 
 ```bash
 $ curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
 $ python get-pip.py
-```
-
-#### Instalar pipenv
-```bash
 $ pip3 install pipenv
 ```
 
-#### Para revisar la historia de comandos hasta ahora:
+Para revisar la historia de comandos hasta ahora:
 ```
 $ nano ~/.bash_history
 $ cp ~/.bash_history ~/Downloads/bashHistory.txt
 ```
 
-
-#### Instalar venv
+### Instalar venv
 
 Actualmente, `venv` es la herramienta sugerida en la docu de Python.
 
 ```bash
-$ sudo apt-get update && sudo apt-get upgrade -y
+$ sudo apt-get update && sudo apt-get upgrade
 $ sudo apt install python3-venv
-
-# para probar
 $ python3 -m venv my-project-env
 $ source my-project-env/bin/activate
 ```
@@ -363,24 +304,25 @@ _esta guia necesita ser actualizado despues de esta linea_
 ***
 
 
-#### Instalar geckodriver
+### Instalar geckodriver
 Encontrar la última versión del geckodriver para cualquier sistema operativo:
   - https://github.com/mozilla/geckodriver/releases
 
-Al momento de actualizar esta guía, era _geckodriver-v0.26.0-linux64.tar.gz_
+Al momento de actualizar esta guía, era _geckodriver-v0.24.0-linux64.tar.gz_
 
 ```
 $ cd ~/Downloads/
-$ wget https://github.com/mozilla/geckodriver/releases/download/v0.26.0/geckodriver-v0.26.0-linux64.tar.gz
-$ tar -xvzf geckodriver-v0.26.0-linux64.tar.gz
-$ rm geckodriver-v0.26.0-linux64.tar.gz
+$ wget https://github.com/mozilla/geckodriver/releases/download/v0.24.0/geckodriver-v0.24.0-linux64.tar.gz
+$ tar -xvzf geckodriver-v0.24.0-linux64.tar.gz
+$ rm geckodriver-v0.24.0-linux64.tar.gz
 $ chmod +x geckodriver
+$ cp geckodriver /usr/local/bin/
 $ sudo cp geckodriver /usr/local/bin/
 $ geckodriver --version
 ```
 
 
-#### Clonar repositorio git
+### Clonar repositorio git
 
 ```
 $ cd ~/Projects/
@@ -408,9 +350,23 @@ origin	git@github.com:gpalazuelosg/tddpython2ed-superlists.git (push)
 ```
 
 
-### La prueba final
+## La prueba final
 
 Ahora, con el código actual del repositorio, probar que todo funcione (Python + VirtualEnv + Django + Geckodriver):
+
+_lo siguiente es si NO tengo repositorio creado_
+
+```bash
+$ cd ~/Projects/
+$ git clone git@github.com:gpalazuelosg/tddpython2ed-superlists.git
+$ cd tddpython2ed-superlists/
+$ python3 -m venv venv
+$ source venv/bin/activate
+$ pip3 install "django<1.12" "selenium<4"
+$ pip freeze > requirements.txt
+$ python functional_tests.py 
+$ deactivate
+```
 
 _lo siguiente es si YA tengo repositorio creado y requirements.txt tiene contenido_
 
@@ -427,22 +383,6 @@ $ python functional_tests.py
 $ deactivate
 ```
 
-
-_lo siguiente es si NO tengo repositorio creado_
-
-```bash
-$ cd ~/Projects/
-$ git clone git@github.com:gpalazuelosg/tddpython2ed-superlists.git
-$ cd tddpython2ed-superlists/
-$ python3 -m venv venv
-$ source venv/bin/activate
-$ pip3 install "django<1.12" "selenium<4"
-$ pip freeze > requirements.txt
-$ python functional_tests.py 
-$ deactivate
-```
-
-
 Ahora puedes hacer hacer cambios en el repositorio y publicarlos.
 
 
@@ -458,8 +398,8 @@ Referencias:
 
 ```
 $ cd ~/Downloads/
-$ sudo curl -O https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz
-$ sudo tar -xvf go1.13.4.linux-amd64.tar.gz
+$ sudo curl -O https://dl.google.com/go/go1.12.5.linux-amd64.tar.gz
+$ sudo tar -xvf go1.12.5.linux-amd64.tar.gz
 $ sudo mv go /usr/local
 ```
 En este punto, go ha sido descargado, descomprimido y movido al folder /usr/local. Ahora seguimos actualizando las rutas de go (paths).
@@ -493,7 +433,7 @@ $ source ~/.profile
 Comprobar que go está instalado. Debería imprimir algo como se muestra debajo de la ejecución del comando.
 ```
 $ go version
-go version go1.13.4 linux/amd64
+go version go1.12.5 linux/amd64
 ```
 
 Crear un Workspace para trabajar con go; donde go construirá/compilará archivos --- nota que esto va de la mano de la instalación de go, ver el punto previo:
