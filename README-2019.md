@@ -1,5 +1,6 @@
-# Python, Django y TDD
-### Actualizado 2019-08
+# Python, Django, TDD y extras
+
+### Actualizado 2019-11
 Documentar los pasos ejecutados para habilitar un sistema de pruebas mientras leo el libro [Python TDD Book] en 2da. edición.
 ![](https://images-na.ssl-images-amazon.com/images/I/51q3VZT%2BseL._SX379_BO1,204,203,200_.jpg)]
 
@@ -356,13 +357,6 @@ La siguiente referencia es para Windows. Es posible usar el mkvirtualenv en Wind
 
 
 
-
-
-***
-_esta guia necesita ser actualizado despues de esta linea_
-***
-
-
 #### Instalar geckodriver
 Encontrar la última versión del geckodriver para cualquier sistema operativo:
   - https://github.com/mozilla/geckodriver/releases
@@ -377,6 +371,100 @@ $ rm geckodriver-v0.26.0-linux64.tar.gz
 $ chmod +x geckodriver
 $ sudo cp geckodriver /usr/local/bin/
 $ geckodriver --version
+```
+
+
+#### Instalar Golang
+
+Referencias: 
+  - https://golang.org/doc/install
+  - https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
+
+```
+$ cd ~/Downloads/
+$ sudo curl -O https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz
+$ sudo tar -xvf go1.13.4.linux-amd64.tar.gz
+$ sudo mv go /usr/local
+```
+En este punto, go ha sido descargado, descomprimido y movido al folder /usr/local. Ahora seguimos actualizando las rutas de go (paths).
+
+En nano, abrir el siguiente archivo:
+
+```
+$ sudo nano ~/.profile
+```
+
+Hasta el final del archivo, agregar las siguientes líneas. Grabar archivo y salir de nano.
+
+  - Actualizar la ruta de GOROOT si go está instalado en otro folder.
+  - Actualizar la ruta de GOPATH si el folder de trabajo deseado es otro
+
+```
+export GOROOT=/usr/local/go
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+
+```
+
+Ahora refrescar el profile de mi usuario (para evitar cerrar la Terminal y volver a entrar):
+```
+$ source ~/.profile
+```
+
+##### Probar instalación de go
+
+Comprobar que go está instalado. Debería imprimir algo como se muestra debajo de la ejecución del comando.
+```
+$ go version
+go version go1.13.4 linux/amd64
+```
+
+Crear un Workspace para trabajar con go; donde go construirá/compilará archivos --- nota que esto va de la mano de la instalación de go, ver el punto previo:
+```bash
+$ mkdir $HOME/go
+```
+
+Ahora apuntar go al nuevo folder sandbox creado para ello.
+  - Solo hacer cuando quiera cambiar de folder para mis programas go!
+```
+$ export GOPATH=$HOME/Projects/22gosandbox22
+```
+
+Dentro de $HOME/go, generar otros folders "src", "bin" y "pkg" que son los usados en los libros. Dentro de "src", generar otro folder "helloworld" y generar un archivo con extension ".go".
+```bash
+$ cd $HOME/go
+$ mkdir src bin pkg
+$ mkdir src/helloworld
+$ cd src/helloworld
+$ nano hello.go
+```
+Estando en nano editando hello.go, pegar el siguiente código:
+```go
+package main
+
+import "fmt"
+
+func main() {
+    fmt.Printf("hello, world\n")
+}
+```
+Compilar el programa y ejecutarlo:
+```bash
+$ cd ../..    # moverse a raiz de gosandbox
+$ go install src/helloworld/hello.go
+$ ./bin/hello
+```
+
+El programa imprime el mensaje hello world:
+```bash
+$ ./bin/hello 
+hello, world
+```
+
+O corre (compila y ejecuta) en una sola línea:
+```bash
+$ go run src/helloworld/hello.go
 ```
 
 
@@ -450,102 +538,11 @@ Ahora puedes hacer hacer cambios en el repositorio y publicarlos.
 
 
 
-## Instalar Golang
 
-Referencias: 
-  - https://golang.org/doc/install
-  - https://medium.com/@patdhlk/how-to-install-go-1-9-1-on-ubuntu-16-04-ee64c073cd79
 
-```
-$ cd ~/Downloads/
-$ sudo curl -O https://dl.google.com/go/go1.13.4.linux-amd64.tar.gz
-$ sudo tar -xvf go1.13.4.linux-amd64.tar.gz
-$ sudo mv go /usr/local
-```
-En este punto, go ha sido descargado, descomprimido y movido al folder /usr/local. Ahora seguimos actualizando las rutas de go (paths).
+#### Instalar Docker
 
-En nano, abrir el siguiente archivo:
-
-```
-$ sudo nano ~/.profile
-```
-
-Hasta el final del archivo, agregar las siguientes líneas. Grabar archivo y salir de nano.
-
-  - Actualizar la ruta de GOROOT si go está instalado en otro folder.
-  - Actualizar la ruta de GOPATH si el folder de trabajo deseado es otro
-
-```
-export GOROOT=/usr/local/go
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-
-```
-
-Ahora refrescar el profile de mi usuario (para evitar cerrar la Terminal y volver a entrar):
-```
-$ source ~/.profile
-```
-
-### Probar instalación de go
-
-Comprobar que go está instalado. Debería imprimir algo como se muestra debajo de la ejecución del comando.
-```
-$ go version
-go version go1.13.4 linux/amd64
-```
-
-Crear un Workspace para trabajar con go; donde go construirá/compilará archivos --- nota que esto va de la mano de la instalación de go, ver el punto previo:
-```bash
-$ mkdir $HOME/go
-```
-
-Ahora apuntar go al nuevo folder sandbox creado para ello.
-  - Solo hacer cuando quiera cambiar de folder para mis programas go!
-```
-$ export GOPATH=$HOME/Projects/22gosandbox22
-```
-
-Dentro de $HOME/go, generar otros folders "src", "bin" y "pkg" que son los usados en los libros. Dentro de "src", generar otro folder "helloworld" y generar un archivo con extension ".go".
-```bash
-$ cd $HOME/go
-$ mkdir src bin pkg
-$ mkdir src/helloworld
-$ cd src/helloworld
-$ nano hello.go
-```
-Estando en nano editando hello.go, pegar el siguiente código:
-```go
-package main
-
-import "fmt"
-
-func main() {
-    fmt.Printf("hello, world\n")
-}
-```
-Compilar el programa y ejecutarlo:
-```bash
-$ cd ../..    # moverse a raiz de gosandbox
-$ go install src/helloworld/hello.go
-$ ./bin/hello
-```
-
-El programa imprime el mensaje hello world:
-```bash
-$ ./bin/hello 
-hello, world
-```
-
-O corre (compila y ejecuta) en una sola línea:
-```bash
-$ go run src/helloworld/hello.go
-```
-
-## Instalar Docker
-
-### Preparar paquetes apt en Ubuntu
+##### Preparar paquetes apt en Ubuntu
 
 Referencias: 
   - https://docs.docker.com/install/linux/docker-ce/ubuntu/#set-up-the-repository
@@ -585,13 +582,13 @@ $ sudo add-apt-repository \
    stable"
 ```
 
-### Ahora si, instalar Docker CE
+##### Ahora si, instalar Docker CE
 ```
 $ sudo apt-get update
 $ sudo apt-get install docker-ce docker-ce-cli containerd.io
 ```
 
-o instalar una version en especifico:
+o instalar una version en especifico (esto no me interesa mucho):
 
 List the versions available in your repo:
 ```
@@ -608,7 +605,7 @@ Verify that Docker CE is installed correctly by running the hello-world image.
 $ sudo docker run hello-world
 ```
 
-### Ejecutar comando docker sin utilizar sudo (opcional)
+##### Ejecutar comando docker sin utilizar sudo (opcional)
 
 By default, running the docker command requires root privileges — that is, you have to prefix the command with sudo. It can also be run by a user in the docker group, which is automatically created during the installation of Docker. If you attempt to run the docker command without prefixing it with sudo or without being in the docker group, you'll get an output like this:
 ```
@@ -634,7 +631,7 @@ $ id -nG
 sammy sudo docker
 ```
 
-### Comandos docker
+##### Comandos docker
 
 ```
 $ docker run hello-world
@@ -644,7 +641,7 @@ $ docker run ubuntu
 $ docker images
 ```
 
-### Ejecutando un container docker
+##### Ejecutando un container docker
 
 The combination of the -i and -t switches gives you interactive shell access into the container. We can also run linux commands while on the container sheel.
 
@@ -656,7 +653,7 @@ $ apt-get update
 $ apt-get install -y nodejs
 ```
 
-### Committing Changes in a Container to a Docker Image
+##### Committing Changes in a Container to a Docker Image
 
 When you start up a Docker image, you can create, modify, and delete files just like you can with a virtual machine. The changes that you make will only apply to that container. You can start and stop it, but once you destroy it with the ```docker rm``` command, the changes will be lost for good.
 
@@ -688,7 +685,7 @@ finid/ubuntu-nodejs       latest              62359544c9ba        50 seconds ago
 
 In the above example, ubuntu-nodejs is the new image, which was derived from the existing ubuntu image from Docker Hub. The size difference reflects the changes that were made. And in this example, the change was that NodeJS was installed. So next time you need to run a container using Ubuntu with NodeJS pre-installed, you can just use the new image. Images may also be built from what's called a Dockerfile. But that's a very involved process that's well outside the scope of this article.
 
-### Listing Docker Containers
+##### Listing Docker Containers
 ```
 $ docker ps
 
@@ -711,7 +708,7 @@ Stopping a running or active container is as simple as typing:
 $ docker stop container-id
 ```
 
-### Pushing Docker Images to a Docker Repository
+##### Pushing Docker Images to a Docker Repository
 The next logical step after creating a new image from an existing image is to share it with a select few of your friends, the whole world on Docker Hub, or other Docker registry that you have access to. To push an image to Docker Hub or any other Docker registry, you must have an account there.
 
 This section shows you how to push a Docker image to Docker Hub. To learn how to create your own private Docker registry, check out [How To Set Up a Private Docker Registry on Ubuntu 14.04](http://virtualenvwrapper.readthedocs.io/en/latest/install.html).
@@ -733,227 +730,35 @@ The push refers to a repository [docker.io/finid/ubuntu-nodejs]
 After pushing an image to a registry, it should be listed on your account's dashboard
 
 
-## Instalar PHP y Laravel
 
-ref. 
-https://php.tutorials24x7.com/blog/how-to-install-php-7-on-ubuntu-1804-lts
-https://apache.tutorials24x7.com/blog/how-to-install-apache-2-on-ubuntu-1804-lts
-https://php.tutorials24x7.com/blog/how-to-install-php-for-nginx-on-ubuntu-1804-lts
-https://nginx.tutorials24x7.com/blog/how-to-install-and-configure-nginx-on-ubuntu-18-04-lts
-https://apache.tutorials24x7.com/blog/how-to-install-apache-2-on-ubuntu-1804-lts
+#### Instalar Laravel/Valet
 
-
-### Usemos Linuxbrew, ya no mas!
-
-ref. https://docs.brew.sh/Homebrew-on-Linux
-
-```bash
-$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/Linuxbrew/install/master/install.sh)"
-$ sudo apt-get install build-essential
-$ echo 'eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)' >>~/.profile
-
-# o
-gerardo@winterfell:~/Downloads$ /home/linuxbrew/.linuxbrew/bin/brew shellenv
-export HOMEBREW_PREFIX="/home/linuxbrew/.linuxbrew";
-export HOMEBREW_CELLAR="/home/linuxbrew/.linuxbrew/Cellar";
-export HOMEBREW_REPOSITORY="/home/linuxbrew/.linuxbrew/Homebrew";
-export PATH="/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin${PATH+:$PATH}";
-export MANPATH="/home/linuxbrew/.linuxbrew/share/man${MANPATH+:$MANPATH}:";
-export INFOPATH="/home/linuxbrew/.linuxbrew/share/info${INFOPATH+:$INFOPATH}";
-y pegarlos en archivo
-~/.bash_profile
-$ source ~/.bash_profile
-
-
-$ eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
-$ brew install gcc
-$ brew install php@7.3
-$ brew install composer
-$ composer global require "laravel/installer"
-$ laravel
-laravel: command not found
-
-$ which composer
-/home/linuxbrew/.linuxbrew/bin/composer
-
-
-$ nano ~/.bash_profile
-
-
-# agregar al archivo la siguiente linea:
-export PATH=/home/linuxbrew/.linuxbrew/bin/composer:$PATH
-
-
-# ahora grabar el archivo
-# y entonces hacer source en bash:
-$ source ~/.bash_profile
-
-# aqui reiniciar la compu
-
-# despues, en este post:
-https://stackoverflow.com/questions/26376516/laravel-php-command-not-found
-
-
-e hice esto en Ubuntu y me funciono:
-
-
-I set the PATH,but it didn't work.I find other way to solve it. (OSX 10.10 & laravel 5.2)
-1) find the executable file:
-
-~/.composer/vendor/laravel/installer/laravel 
-
-2) give execute permissions:
-
-chmod +x ~/.composer/vendor/laravel/installer/laravel 
-
-3) make a soft link to /usr/bin:
-
-sudo ln -s /Users/zhao/.composer/vendor/laravel/installer/laravel /usr/bin/laravel
-
-
-
-edited Feb 8 '18 at 12:39
-JavaScript Learner
-74044 gold badges88 silver badges2020 bronze badges
-answered Jun 5 '16 at 6:42
-zhaolion
-412
-
-
-
-
-
-
-
-$ sudo nano /etc/sysctl.conf
-$ sudo sysctl -p
-
-```
-
-
-
-----
-https://php.tutorials24x7.com/blog/how-to-install-php-7-on-ubuntu-1804-lts
-
-```bash
-# Refresh package indexes
-$ sudo apt-get update
-
-# Install PHP 7.2 on Ubuntu 18.04 LTS
-$ sudo apt-get install php7.2
-
-# Autoclean
-$ sudo apt-get autoclean
-
-# Autoremove
-$ sudo apt-get autoremove # or sudo apt-get --purge autoremove
-
-# Install FPM Extension
-$ sudo apt-get install php7.2-fpm
-
-# Install MySQL Extension
-$ sudo apt-get install php7.2-mysql
-
-
-# required
-$ sudo apt-get install -y php7.2 php7.2-mysql libapache2-mod-php7.2 php7.2-opcache php7.2-zip
-
-# optionals:
-$ sudo apt-get install php7.2-cgi php7.2-cli php7.2-curl php7.2-json php7.2-gd php-imagick php7.2-mbstring php7.2-intl php7.2-pspell php7.2-imap php7.2-sqlite3 php7.2-tidy php7.2-xmlrpc php7.2-xsl php7.2-fpm
-
-```
-
-It will ask to confirm the installation. Press Y and hit Enter to confirm the installation. The above-mentioned command will install the PHP at /usr/bin/php7.2 and place the configuration file at /etc/php/7.2/cli/php.ini.
-
-
-Install OPcache to enable caching at the bytecode level.
-
-```bash
-# Install OPcache extension
-$ sudo apt-get install php7.2-opcache
-```
-
-Install the extensions to handle compressed files.
-```bash
-# Install Zip
-$ sudo apt-get install php7.2-zip
-```
-
-## Instalar Composer
-ref. 
-https://www.digitalocean.com/community/tutorials/how-to-install-and-use-composer-on-ubuntu-18-04
-https://tecadmin.net/install-php-composer-on-ubuntu/
-https://linuxize.com/post/how-to-install-and-use-composer-on-ubuntu-18-04/
-
-
-```bash
-$ sudo apt update
-$ sudo apt install curl php-cli php-mbstring git unzip
-$ cd ~
-$ curl -sS https://getcomposer.org/installer -o composer-setup.php
-$ sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
-$ composer
-$ sudo chown -R $USER ~/.composer/
-```
-
-## Instalar Laravel
-Asumiendo que PHP y composer estan instalados
-
-ref.
-https://stackoverflow.com/questions/26376516/laravel-php-command-not-found
-
-```bash
-$ composer global require "laravel/installer"
-$ laravel
-laravel: command not found
-```
-
-Si obtenemos el error anterior, hacer lo siguiente:
-```bash
-$ nano ~/.bash_profile
-
-
-# agregar al archivo la siguiente linea:
-export PATH=~/.composer/vendor/bin:$PATH
-
-# ahora grabar el archivo
-# y entonces hacer source en bash:
-$ source ~/.bash_profile
-
-# intentar nuevamente commando laravel
-$ laravel
-Laravel Installer 2.1.0
-...
-```
-
-Instalar Laravel/Valet
 ref.
 https://vander.host/knowledgebase/laravel/install-guide-for-laravel-valet/
+
 https://cpriego.github.io/valet-linux/requirements
 https://laravel-news.com/valet-for-ubuntu-linux
 
-https://websiteforstudents.com/install-php-7-2-mcrypt-module-on-ubuntu-18-04-lts/
-
-https://scotch.io/tutorials/use-laravel-valet-for-a-super-quick-dev-server#toc-installing-valet
-
 
 ```bash
-$ sudo apt-get install libnss3-tools jq xsel
-$ $ sudo apt-get install -y php7.2-cli php7.2-common php7.2-curl php7.2-json php7.2-mbstring php7.2-opcache php7.2-readline php7.2-xml php7.2-zip
+$ composer global require cpriego/valet-linux
+$ sudo apt-get install network-manager libnss3-tools jq xsel
+
+$ sudo apt-get install -y php7.2-cli php7.2-common php7.2-curl php7.2-json php7.2-mbstring php7.2-opcache php7.2-readline php7.2-xml php7.2-zip
 $ sudo apt install php-pear php7.2-dev libmcrypt-dev gcc make autoconf libc-dev pkg-config
 
 $ sudo apt install php-dev libmcrypt-dev php-pear
 $ sudo apt-get -y install gcc make autoconf libc-dev pkg-config
 $ sudo apt-get -y install libmcrypt-dev
 
-$ composer global require laravel/valet # no use esta
+$ composer global require laravel/valet # no use esta en linux
+
 $ composer global require cpriego/valet-linux
 $ valet install
 ```
 
 
-
-## Instalar Java
+#### Instalar Java
 
 Evitaremos instalar las versiones de Oracle debido al tema de licencias.
 Instaremos Java 8 de OpenJDK.
@@ -979,22 +784,28 @@ https://aws.amazon.com/corretto/
 Para instalar, las instrucciones son:
 https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/generic-linux-install.html
 
-Descargar el instalador para Amazon Corretto JDK 11, de 64 bits. Actualmente el archivo es java-11-amazon-corretto-jdk_11.0.4.11-1_amd64.deb
-https://d3pxv6yz143wms.cloudfront.net/11.0.4.11.1/java-11-amazon-corretto-jdk_11.0.4.11-1_amd64.deb
+y
+https://docs.aws.amazon.com/corretto/latest/corretto-11-ug/downloads-list.html
+
+Descargar el instalador para Amazon Corretto JDK 11, de 64 bits. Actualmente el archivo es java-11-amazon-corretto-jdk_11.0.5.10-1_amd64.deb
+
+https://d3pxv6yz143wms.cloudfront.net/11.0.5.10.1/java-11-amazon-corretto-jdk_11.0.5.10-1_amd64.deb
 
 ```bash
 $ sudo apt-get update && sudo apt-get install java-common
-$ sudo dpkg --install ~/Downloads/java-11-amazon-corretto-jdk_11.0.4.11-1_amd64.deb
+$ sudo dpkg --install ~/Downloads/java-11-amazon-corretto-jdk_11.0.5.10-1_amd64.deb
 $ java -version
-openjdk version "11.0.4" 2019-07-16 LTS
-OpenJDK Runtime Environment Corretto-11.0.4.11.1 (build 11.0.4+11-LTS)
-OpenJDK 64-Bit Server VM Corretto-11.0.4.11.1 (build 11.0.4+11-LTS, mixed mode)
+openjdk version "11.0.5" 2019-10-15 LTS
+OpenJDK Runtime Environment Corretto-11.0.5.10.1 (build 11.0.5+10-LTS)
+OpenJDK 64-Bit Server VM Corretto-11.0.5.10.1 (build 11.0.5+10-LTS, mixed mode)
 ```
 
 Si acaso no veo la versión de Amazon Corretto como la default:
 ```bash
 $ sudo update-alternatives --config java
 $ sudo update-alternatives --config javac
+
+$ rm ~/Downloads/java-11-amazon-corretto-jdk_11.0.5.10-1_amd64.deb
 ```
 
 
@@ -1011,6 +822,8 @@ $ sudo dpkg --remove java-11-amazon-corretto-jdk
 
 ## Instalar Eclipse
 ref. 
+https://www.eclipse.org/downloads/packages/
+
 https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-eclipse-ide-on-ubuntu-18-04-lts.html
 https://www.itzgeek.com/how-tos/linux/ubuntu-how-tos/how-to-install-elasticsearch-logstash-and-kibana-elk-stack-on-ubuntu-18-04-ubuntu-16-04.html
 https://linuxize.com/post/how-to-install-the-latest-eclipse-ide-on-ubuntu-18-04/
@@ -1026,7 +839,9 @@ Download and extract Eclipse package to your desired directory (Ex. /usr/).
 Then, symlink the eclipse executable to /usr/bin path so that all users on your machine can able to use Eclipse IDE.
 
 ```bash
-$ wget http://mirrors.xmission.com/eclipse/technology/epp/downloads/release/2019-09/R/eclipse-jee-2019-09-R-linux-gtk-x86_64.tar.gz
+$ cd ~/Downloads/
+$ wget http://eclipse.mirror.rafal.ca/technology/epp/downloads/release/2019-09/R/eclipse-jee-2019-09-R-linux-gtk-x86_64.tar.gz
+
 $ sudo tar -zxvf eclipse-jee-2019-09-R-linux-gtk-x86_64.tar.gz -C /usr/
 $ sudo ln -s /usr/eclipse/eclipse /usr/bin/eclipse
 ```
@@ -1055,6 +870,14 @@ Start Eclipse IDE
 ```bash
 $ eclipse
 ```
+
+
+
+
+***
+_esta guia necesita ser actualizado despues de esta linea_
+***
+
 
 
 
