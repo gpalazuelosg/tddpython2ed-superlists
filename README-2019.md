@@ -1068,6 +1068,8 @@ $ sudo apt install pgadmin4
 
 #### Configurando postgresql
 
+ref. [(digitalocean.com) How To Install and Use PostgreSQL on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04)
+
 ```bash
 $ pg_ctlcluster 12 main start
 Warning: the cluster will not be running as a systemd service. Consider using systemctl:
@@ -1090,7 +1092,7 @@ $ service postgresql restart
 $ service postgresql reload
 $ service postgresql force-reload
 
-# By default, PostgreSQL creates a special user postgres that has all rights. To actually use PostgreSQL, you must first log in to that account:
+# By default, PostgreSQL creates a special user postgres that has all rights in Ubuntu. To actually use PostgreSQL, you must first log in to that account:
 $ sudo su postgres
 # Your prompt should change to something similar to:
 postgres@ubuntu-VirtualBox:/home/ubuntu$
@@ -1171,6 +1173,76 @@ $ sudo service postgresql restart
 ```
 
 Using PostgreSQL is the same as using any other SQL type database. I won’t go into the specific commands, since this article is about getting you started with a working setup. However, here is a very useful [gist to reference!](https://gist.github.com/Kartones/dd3ff5ec5ea238d4c546) Also, the man page (man psql) and the [documentation](https://www.postgresql.org/docs/manuals/) are very helpful.
+
+
+
+> ref. [(digitalocean.com) How To Install and Use PostgreSQL on Ubuntu 18.04](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-18-04)
+
+
+* [How To Secure PostgreSQL on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-secure-postgresql-on-an-ubuntu-vps)
+* [How To Backup PostgreSQL Databases on an Ubuntu VPS](https://www.digitalocean.com/community/tutorials/how-to-backup-postgresql-databases-on-an-ubuntu-vps)
+* [How to Build a Django and Gunicorn Application with Docker](https://www.digitalocean.com/community/tutorials/how-to-build-a-django-and-gunicorn-application-with-docker)
+
+
+If you are logged in as the postgres account, you can create a new user by typing:
+```bash
+$ createuser --interactive
+# or instead, you prefer to use sudo for each command without switching from your normal account, type:
+$ sudo -u postgres createuser --interactive
+# output:
+Enter name of role to add: sammy
+Shall the new role be a superuser? (y/n) y
+
+```
+
+##### Creating a New Database
+Another assumption that the Postgres authentication system makes by default is that for any role used to log in, that role will have a database with the same name which it can access.
+
+This means that, if the user you created in the last section is called sammy, that role will attempt to connect to a database which is also called “sammy” by default. You can create the appropriate database with the createdb command.
+
+If you are logged in as the postgres account, you would type something like:
+```bash
+$ createdb sammy
+
+# If, instead, you prefer to use sudo for each command without switching from your normal account, you would type:
+$ sudo -u postgres createdb sammy
+
+# This flexibility provides multiple paths for creating databases as needed.
+```
+
+##### Opening a Postgres Prompt with the New Role
+
+To log in with ident based authentication, you’ll need a Linux user with the same name as your Postgres role and database.
+
+If you don’t have a matching Linux user available, you can create one with the adduser command. You will have to do this from your non-root account with sudo privileges (meaning, not logged in as the postgres user):
+
+```bash
+$ sudo adduser sammy
+
+# Once this new account is available, you can either switch over and connect to the database by typing:
+$ sudo -i -u sammy
+$ psql
+
+# Or, you can do this inline:
+$ sudo -u sammy psql
+```
+
+This command will log you in automatically, assuming that all of the components have been properly configured.
+
+If you want your user to connect to a different database, you can do so by specifying the database like this:
+```bash
+$ psql -d postgres
+
+# Once logged in, you can get check your current connection information by typing:
+\conninfo
+# output:
+You are connected to database "sammy" as user "sammy" via socket in "/var/run/postgresql" at port "5432".
+# This is useful if you are connecting to non-default databases or with non-default users.
+```
+
+
+
+
 
 
 > Revisa [esta liga](https://linuxize.com/post/how-to-install-postgresql-on-ubuntu-18-04/) que contiene más detalles de trabajar SQL en Posgresql.
