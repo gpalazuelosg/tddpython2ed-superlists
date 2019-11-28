@@ -1054,6 +1054,8 @@ $ brew install postgres
 You can manually execute the service instead with:
   pg_ctl -D /home/linuxbrew/.linuxbrew/var/postgres start
 ...
+
+$ sudo -u postgres psql -c "SELECT version();"
 ```
 
 
@@ -1171,12 +1173,187 @@ $ sudo service postgresql restart
 Using PostgreSQL is the same as using any other SQL type database. I won’t go into the specific commands, since this article is about getting you started with a working setup. However, here is a very useful [gist to reference!](https://gist.github.com/Kartones/dd3ff5ec5ea238d4c546) Also, the man page (man psql) and the [documentation](https://www.postgresql.org/docs/manuals/) are very helpful.
 
 
-Revisa [esta liga](https://linuxize.com/post/how-to-install-postgresql-on-ubuntu-18-04/) que contiene más detalles de trabajar SQL en Posgresql.
+> Revisa [esta liga](https://linuxize.com/post/how-to-install-postgresql-on-ubuntu-18-04/) que contiene más detalles de trabajar SQL en Posgresql.
+
+
+PostgreSQL supports multiple authentication methods. The most commonly used are:
+* Trust - With this method, the role can connect without a password, as long as the criteria defined in the pg_hba.conf are met.
+* Password - A role can connect by providing a password. The passwords can be stored as scram-sha-256 md5 and password (clear-text)
+* Ident - This method is only supported on TCP/IP connections. Works by obtaining the client’s operating system user name, with an optional user name mapping.
+* Peer - Same as Ident but it is only supported on local connections.
+
+PostgreSQL client authentication is defined in the configuration file named pg_hba.conf. By default for local connections, PostgreSQL is set to use the peer authentication method.
+
+The postgres user is created automatically when you install PostgreSQL. This user is the superuser for the PostgreSQL instance and it is equivalent to the MySQL root user.
+
+To log in to the PostgreSQL server as the postgres user first you need to switch to the user postgres and then you can access a PostgreSQL prompt using the psql utility:
+
+```bash
+$ sudo su - postgres
+$ psql
+\q
+
+# You can also access the PostgreSQL prompt without switching users using the sudo command:
+$ sudo -u postgres psql
+```
+
+
+##### Creating PostgreSQL Role and Database
+
+You can create new roles from the command line using the createuser command. Only superusers and roles with CREATEROLE privilege can create new roles.
+
+In the following example, we will create a new role named john a database named johndb and grant privileges on the database.
+
+More info on [here](https://www.postgresql.org/docs/12/index.html)
+
+```bash
+# Create a new PostgreSQL Role
+$ sudo su - postgres -c "createuser john"
+# Create a new PostgreSQL Database
+$ sudo su - postgres -c "createdb johndb"
+# Grant privileges
+$ sudo -u postgres psql
+# and run the following query:
+grant all privileges on database johndb to john;
+
+```
+
+
+#### Instalar MongoDB 4.0
+
+[(linuxize.com) How to Install MongoDB on Ubuntu 18.04](https://linuxize.com/post/how-to-install-mongodb-on-ubuntu-18-04/)
+
+
+You can consult [The MongoDB 4.0 Manual](https://docs.mongodb.com/manual/) for more information on this topic.
+
+
+```bash
+$ sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
+# to avoid error _add-apt-repository command not found_
+$ sudo apt-get install software-properties-common
+$ sudo add-apt-repository 'deb [arch=amd64] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse'
+$ sudo apt update
+$ sudo apt install mongodb-org
+```
+
+The following packages will be installed on your system as a part of the mongodb-org package:
+* mongodb-org-server - The mongod daemon and corresponding init scripts and configurations.
+* mongodb-org-mongos - The mongos daemon.
+* mongodb-org-shell - The mongo shell is an interactive JavaScript interface to MongoDB. It is used to perform administrative tasks through the command line.
+* mongodb-org-tools - Contains several MongoDB tools for to importing and exporting data, statistics, as well as other utilities.
+
+
+##### Starting MongoDB
+
+```bash
+# Starting MongoDB
+$ sudo systemctl start mongod
+$ sudo systemctl enable mongod
+
+# Verifying MongoDB Installation
+$ mongo --eval 'db.runCommand({ connectionStatus: 1 })'
+MongoDB shell version v4.0.10
+connecting to: mongodb://127.0.0.1:27017
+MongoDB server version: 4.0.10
+{
+  "authInfo" : {
+    "authenticatedUsers" : [ ],
+    "authenticatedUserRoles" : [ ]
+  },
+  "ok" : 1
+}
+# A value of 1 for the ok field indicates success.
+```
+
+##### Configuring MongoDB
+
+MongoDB uses a YAML formatted configuration file, ```/etc/mongod.conf```. You can configure your MongoDB instance by editing this file.
+
+The default configuration settings are sufficient for most users. However, for production environments, it is recommended to uncomment the security section and enable authorization as shown below:
+
+```/etc/mongod.conf```
+```bash
+security:
+  authorization: enabled
+```
+
+The authorization option enables [Role-Based Access Control (RBAC)](https://docs.mongodb.com/manual/core/authorization/) that regulates users access to database resources and operations. If this option is disabled each user will have access to all databases and perform any action.
+
+After making changes to the MongoDB configuration file, restart the mongod service with:
+```bash
+$ sudo systemctl restart mongod
+```
+
+##### Creating Administrative MongoDB User
+
+If you enabled the MongoDB authentication, create an administrative MongoDB user that will be used to access and manage the MongoDB instance.
+
+First access the mongo shell with:
+```bash
+$ mongo
+# Once you are inside the MongoDB shell type the following command to connect to the admin database:
+use admin
+# output:
+switched to db admin
+
+# Issue the following command to create a new user named mongoAdmin with the userAdminAnyDatabase role:
+db.createUser(
+  {
+    user: "mongoAdmin", 
+    pwd: "changeMe", 
+    roles: [ { role: "userAdminAnyDatabase", db: "admin" } ]
+  }
+)
+# output:
+Successfully added user: {
+	"user" : "mongoAdmin",
+	"roles" : [
+		{
+			"role" : "userAdminAnyDatabase",
+			"db" : "admin"
+		}
+	]
+}
+
+# exit the mongo shell
+quit()
+```
+
+To test the changes, access the mongo shell using the administrative user you have previously created:
+```bash
+$ mongo -u mongoAdmin -p --authenticationDatabase admin
+
+use admin
+# output:
+switched to db admin
+
+# Now, print the users with:
+show users
+# output:
+{
+	"_id" : "admin.mongoAdmin",
+	"user" : "mongoAdmin",
+	"db" : "admin",
+	"roles" : [
+		{
+			"role" : "userAdminAnyDatabase",
+			"db" : "admin"
+		}
+	],
+	"mechanisms" : [
+		"SCRAM-SHA-1",
+		"SCRAM-SHA-256"
+	]
+}
+```
+
+You can also try to access the mongo shell without any arguments ( just type mongo) and see if you can list the users using the same commands as above.
 
 
 
 
 
+***
 ***
 _esta guia necesita ser actualizado despues de esta linea_
 ***
