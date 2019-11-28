@@ -874,6 +874,309 @@ $ eclipse
 
 
 
+#### Instalar IntelliJ IDEA Community Edition
+
+En caso de que quiera instalar Intellij IDEA, la versión gratuita.
+
+```bash
+$ sudo snap install intellij-idea-community --classic
+```
+
+
+#### Instalar mysql (MariaDB) en Ubuntu 18.04
+
+ > Otras referencias:
+ > * [(itsfoss.com) How to Install MySQL in Ubuntu Linux](https://itsfoss.com/install-mysql-ubuntu/)
+ > * [(itsfoss.com) How to Install and Configure PostgreSQL on Ubuntu](https://itsfoss.com/install-postgresql-ubuntu/)
+ > * [(linuxize.com) How to Install PostgreSQL on Ubuntu 18.04](https://linuxize.com/post/how-to-install-postgresql-on-ubuntu-18-04/)
+
+
+Instalar mariadb:
+```bash
+$ sudo apt update
+$ sudo apt install mariadb-server mariadb-client
+$ mysql --version
+mysql  Ver 15.1 Distrib 10.1.41-MariaDB, for debian-linux-gnu (x86_64) using readline 5.2
+```
+
+
+La instalación de MariaDB registra un symlink "mysql" y además inicia el servicio.
+
+Verificar instalacion de MariaDB
+```bash
+$ sudo systemctl status mariadb
+```
+
+Deberia de leer algo como:
+```Active: active (running) since Wed 2019-11-13 22:14:06 MST; 5min ago```
+
+
+Asegurar la instalación de MariaDB:
+```bash
+$ sudo mysql_secure_installation
+```
+
+Para conectar desde la shell a MariaDB:
+```bash
+# https://stackoverflow.com/questions/39281594/error-1698-28000-access-denied-for-user-rootlocalhost
+# https://www.percona.com/blog/2016/03/16/change-user-password-in-mysql-5-7-with-plugin-auth_socket/
+# https://stackoverflow.com/questions/39281594/error-1698-28000-access-denied-for-user-rootlocalhost
+# https://www.zeppelinux.es/corregir-error-1698-28000-access-denied-for-user-rootlocalhost-en-mariadb-mysql/
+
+# esto no funciona porque el usuario root utiliza autenticacion de Unix Sockets
+$ mysql -u root -p
+
+# para no modificar el usuario root, lo mejor es crear un usuario mysql con mi nombre de usuario de sesion:
+# dentro de sesion en mysql
+mysql> USE mysql;
+mysql> CREATE USER 'rufinus'@'localhost' IDENTIFIED BY '';
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'rufinus'@'localhost';
+
+# en la siguiente linea, puedo usar 
+# auth_socket = utilizar mi usuario y clave de sesion mysql
+# mysql_native_password = para poner una clave al usuario mysql creado
+# voy por lo segundo
+mysql> UPDATE user SET plugin='mysql_native_password' WHERE User='rufinus';
+mysql> FLUSH PRIVILEGES;
+
+# no jalo
+mysql> ALTER USER 'rufinus'@'localhost' IDENTIFIED WITH mysql_native_password BY 'sancho-panza';
+
+# si jalo
+mysql> MariaDB [mysql]> update mysql.user set authentication_string=password('sancho-panza') where user='rufinus' and Host ='localhost';
+
+mysql> flush privileges;
+
+mysql> \q # salir
+
+$ sudo service mariadb restart
+
+# despues intentar loguearme con usuario gerardo y una contrase;a
+$ mysql -u rufinus -p
+```
+
+
+
+Stop, Start, status y restart de MariaDB:
+```bash
+$ sudo systemctl stop mariadb.service      # To Stop MariaDB service 
+$ sudo systemctl start mariadb.service     # To Start MariaDB service 
+$ sudo systemctl status mariadb.service    # To Check MariaDB service status 
+$ sudo systemctl restart mariadb.service   # To Stop then Start MariaDB service 
+```
+
+
+
+
+#### Instalar PostgreSQL en Ubuntu 18.04
+
+ > Otras referencias:
+  > * [(itsfoss.com) How to Install and Configure PostgreSQL on Ubuntu](https://itsfoss.com/install-postgresql-ubuntu/)
+ > * [(linuxize.com) How to Install PostgreSQL on Ubuntu 18.04](https://linuxize.com/post/how-to-install-postgresql-on-ubuntu-18-04/)
+ > * [(tecadmin.net) How to Install PostgreSQL 11 on Ubuntu 18.04 & 16.04 LTS](https://tecadmin.net/install-postgresql-server-on-ubuntu/)
+
+Acá los pasos para instalar Postgresql desde repositorios de postgresql.org:
+
+##### (_mi preferido_) Instalar postgresql desde repositorio Ubuntu --- tiene versión más nueva. Básicamente hay que actualizar la GPG key en el catálogo, agregar repositorio apt a local y bajar la versión más reciente usando apt normal.
+```bash
+$ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+$ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" >> /etc/apt/sources.list.d/pgdg.list'
+$ sudo apt update
+$ sudo apt install postgresql postgresql-contrib
+...
+Setting up postgresql-12 (12.1-1.pgdg18.04+1) ...
+Creating new PostgreSQL cluster 12/main ...
+/usr/lib/postgresql/12/bin/initdb -D /var/lib/postgresql/12/main --auth-local peer --auth-host md5
+The files belonging to this database system will be owned by user "postgres".
+This user must also own the server process.
+
+The database cluster will be initialized with locales
+  COLLATE:  en_US.UTF-8
+  CTYPE:    en_US.UTF-8
+  MESSAGES: en_US.UTF-8
+  MONETARY: es_MX.UTF-8
+  NUMERIC:  es_MX.UTF-8
+  TIME:     es_MX.UTF-8
+The default database encoding has accordingly been set to "UTF8".
+The default text search configuration will be set to "english".
+
+Data page checksums are disabled.
+
+fixing permissions on existing directory /var/lib/postgresql/12/main ... ok
+creating subdirectories ... ok
+selecting dynamic shared memory implementation ... posix
+selecting default max_connections ... 100
+selecting default shared_buffers ... 128MB
+selecting default time zone ... America/Mazatlan
+creating configuration files ... ok
+running bootstrap script ... ok
+performing post-bootstrap initialization ... ok
+syncing data to disk ... ok
+
+Success. You can now start the database server using:
+
+    pg_ctlcluster 12 main start
+
+Ver Cluster Port Status Owner    Data directory              Log file
+12  main    5433 down   postgres /var/lib/postgresql/12/main /var/log/postgresql/postgresql-12-main.log
+update-alternatives: using /usr/share/postgresql/12/man/man1/postmaster.1.gz to provide /usr/share/man/man1/postmaster.1.gz (postmaster.1.gz) in auto mode
+Setting up postgresql-contrib (12+210.pgdg18.04+1) ...
+Setting up postgresql (12+210.pgdg18.04+1) ...
+Processing triggers for postgresql-common (210.pgdg18.04+1) ...
+Building PostgreSQL dictionaries from installed myspell/hunspell packages...
+  en_us
+Removing obsolete dictionary files:
+$
+```
+
+##### (*no mi preferido*) Instalar postgresql desde repositorio Ubuntu --- tiene versión más vieja:
+```bash
+$ apt show postgresql
+Package: postgresql
+Version: 10+190ubuntu0.1
+Priority: optional
+Section: database
+Source: postgresql-common (190ubuntu0.1)
+Origin: Ubuntu
+$ sudo apt update
+$ sudo apt install postgresql postgresql-contrib
+```
+
+##### (_no mi preferido_) Sí y solo si tengo Homebrew instalado, podría verificar si postgresql existe en su repositorio del siguiente modo:
+```bash
+$ brew info postgres
+postgresql: stable 12.1 (bottled), HEAD
+Object-relational database system
+https://www.postgresql.org/
+Not installed
+$ brew install postgres
+...
+You can manually execute the service instead with:
+  pg_ctl -D /home/linuxbrew/.linuxbrew/var/postgres start
+...
+```
+
+
+#### Instalar pgadmin4
+
+```bash
+$ sudo apt install pgadmin4
+```
+
+
+#### Configurando postgresql
+
+```bash
+$ pg_ctlcluster 12 main start
+Warning: the cluster will not be running as a systemd service. Consider using systemctl:
+  sudo systemctl start postgresql@12-main
+Error: You must run this program as the cluster owner (postgres) or root
+
+
+# You can check if PostgreSQL is running by executing
+$ service postgresql status
+● postgresql.service - PostgreSQL RDBMS
+   Loaded: loaded (/lib/systemd/system/postgresql.service; enabled; vendor preset: enabled)
+   Active: active (exited) since Wed 2019-11-27 23:21:26 MST; 18min ago
+
+# also consider following commands:
+$ service postgresql
+Usage: /etc/init.d/postgresql {start|stop|restart|reload|force-reload|status} [version ..]
+# so:
+$ service postgresql stop
+$ service postgresql restart
+$ service postgresql reload
+$ service postgresql force-reload
+
+# By default, PostgreSQL creates a special user postgres that has all rights. To actually use PostgreSQL, you must first log in to that account:
+$ sudo su postgres
+# Your prompt should change to something similar to:
+postgres@ubuntu-VirtualBox:/home/ubuntu$
+# Now, run the PostgreSQL Shell with the utility psql:
+$ psql
+# You should be prompted with:
+psql (12.1 (Ubuntu 12.1-1.pgdg18.04+1), server 10.11 (Ubuntu 10.11-1.pgdg18.04+1))
+Type "help" for help.
+
+postgres=#
+
+# You can type in \q to quit and \? for help
+
+# To see all existing tables, enter:
+\l
+
+# With \du you can display the PostgreSQL users:
+\du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+
+
+ # You can change the password of any user (including postgres) with:
+
+ALTER USER postgres WITH PASSWORD 'my_password';
+
+# Note: Replace postgres with the name of the user and my_password with the wanted password. Also, don’t forget the ; (semicolumn) after every statement.
+
+# It is recommended that you create another user (it is bad practice to use the default postgres user). To do so, use the command:
+
+CREATE USER my_user WITH PASSWORD 'my_password';
+
+# If you run \du, you will see, however, that my_user has no attributes yet. Let’s add Superuser to it:
+
+ALTER USER my_user WITH SUPERUSER;
+
+
+# You can remove users with:
+
+DROP USER my_user;
+
+# To log in as another user, quit the prompt (\q) and then use the command:
+
+psql -U my_user
+
+# You can connect directly to a database with the -d flag:
+
+psql -U my_user -d my_db
+
+# You should call the PostgreSQL user the same as another existing user. For example, my user is ubuntu. To log in, from the terminal I use:
+
+psql -U ubuntu -d postgres
+
+# Note: You must specify a database (by default it will try connecting you to the database named the same as the user you are logged in as).
+
+
+# If you have a the error:
+
+psql: FATAL:  Peer authentication failed for user "my_user"
+
+# Make sure you are logging as the correct user and edit /etc/postgresql/11/main/pg_hba.conf with administrator rights:
+
+$ sudo vim /etc/postgresql/12/main/pg_hba.conf 
+
+# Note: Replace 12 with your version (e.g. 10).
+
+# Here, replace the line:
+local   all             postgres                                peer
+
+# With:
+local   all             postgres                                md5
+
+# Then restart PostgreSQL:
+$ sudo service postgresql restart
+
+```
+
+Using PostgreSQL is the same as using any other SQL type database. I won’t go into the specific commands, since this article is about getting you started with a working setup. However, here is a very useful [gist to reference!](https://gist.github.com/Kartones/dd3ff5ec5ea238d4c546) Also, the man page (man psql) and the [documentation](https://www.postgresql.org/docs/manuals/) are very helpful.
+
+
+Revisa [esta liga](https://linuxize.com/post/how-to-install-postgresql-on-ubuntu-18-04/) que contiene más detalles de trabajar SQL en Posgresql.
+
+
+
+
+
 ***
 _esta guia necesita ser actualizado despues de esta linea_
 ***
@@ -910,15 +1213,7 @@ netbeans 11.1 from 'apache-netbeans' installed
 ```
 
 
-## Instalar IntelliJ IDEA Community Edition
-
-En caso de que quiera instalar Intellij IDEA, la versión gratuita.
-
-```bash
-$ sudo snap install intellij-idea-community --classic
-```
-
-## Instalar apache2, mysql (MariaDB) en Ubuntu 18.04
+#### Instalar apache2 en Ubuntu 18.04
 re. 
 https://tecadmin.net/install-mariadb-on-ubuntu-18-04-bionic/
 https://computingforgeeks.com/install-mariadb-10-on-ubuntu-18-04-and-centos-7/
@@ -931,51 +1226,6 @@ $ sudo apt-key adv --recv-keys --keyserver hkp://keyserver.ubuntu.com:80 0xF1656
 $ sudo nano /etc/apt/sources.list.d/mariadb.list
 ```
 
-Grabar lo siguiente en el archivo y salir de nano:
-```
-# MariaDB 10.3 Repository
-deb [arch=amd64,arm64,ppc64el] http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main
-deb-src http://sfo1.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu bionic main
-```
-ó púde haber hecho lo siguiente:
-```
-$ sudo add-apt-repository "deb [arch=amd64,arm64,ppc64el] http://mariadb.mirror.liquidtelecom.com/repo/10.4/ubuntu $(lsb_release -cs) main"
-```
-
-Después instalar mariadb:
-```bash
-$ sudo apt update
-$ sudo apt install mariadb-server mariadb-client
-```
-
-La instalación de MariaDB registra un symlink "mysql" y además inicia el servicio.
-
-Verificar instalacion de MariaDB
-```bash
-$ sudo systemctl status mariadb
-```
-
-Deberia de leer algo como:
-```Active: active (running) since Mon 2019-10-14 23:35:24 MDT; 50s ago```
-
-Para conectar desde la shell a MariaDB:
-```bash
-$ mysql -u root -p
-```
-
-Asegurar la instalación de MariaDB:
-```bash
-$ sudo mysql_secure_installation
-```
-
-
-Stop, Start, status y restart de MariaDB:
-```bash
-$ sudo systemctl stop mariadb.service      # To Stop MariaDB service 
-$ sudo systemctl start mariadb.service     # To Start MariaDB service 
-$ sudo systemctl status mariadb.service    # To Check MariaDB service status 
-$ sudo systemctl restart mariadb.service   # To Stop then Start MariaDB service 
-```
 
 ## Install DBeaver on Ubuntu 18.04
 ref. 
